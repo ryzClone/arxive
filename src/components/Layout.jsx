@@ -177,6 +177,15 @@ class Layout extends Component {
                   
               </Link>
 
+              <Link to="/home/joingroup" className="link" title="Service">
+                  <img src={Service} alt="" style={{width:"25px" , height:"25px" , filter: "brightness(0) invert(1)"}}/>
+
+                  <div className="linkText">
+                    Join Group
+                  </div>
+                  
+              </Link>
+
             </div>
 
         </div>

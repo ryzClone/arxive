@@ -9,6 +9,7 @@ import ZipFiles from './components/ZipFiles';
 import Group from './components/Group';
 import Service from './components/Service';
 import NoPage from './components/Nopage';
+import JoinGroup from './components/JoinGroup';
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
         <Route path="/home/contact" element={<Transfer />} />
         <Route path="/home/group" element={<Group />} />
         <Route path="/home/service" element={<Service />} />
+        <Route path="/home/joingroup" element={<JoinGroup />} />
         <Route path="/home/*" element={<NoPage />} />
       </Route>
     </Routes>

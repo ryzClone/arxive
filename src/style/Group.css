@@ -1,0 +1,85 @@
+.main{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 0px 10px;
+}
+.group-menu{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.group-main-text{
+    font-size: 24px;
+    font-family: "-apple-system";
+    margin: 8px 0px;
+    color: #212529;
+}
+.group-main-items{
+    display: flex;
+    gap: 10px;
+}
+.group-main-item-list1{
+    background-color: #4180B7;
+    font-size: 14px;
+    padding: 4px 8px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+.group-main-item-list2{
+    background-color: #4eb867;
+    font-size: 14px;
+    padding: 4px 8px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+.group-main-item-list3{
+    background-color: #aeaaaa;
+    font-size: 14px;
+    padding: 4px 8px;
+    color: #212529;
+    border: none;
+    cursor: pointer;
+}
+.group-body{
+    display: flex;
+    gap: 30px;
+    margin-left: 20px;
+}
+.input-body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+}
+.group-input{
+    padding: 5px 0px 5px 2px;
+}
+.group-input:focus{
+    outline: none;
+}
+.group-btn{
+    display: block;
+    width: 29px;
+    height: 29px;
+    padding: 5px;
+    background-color: #1890ff;
+    border: none;
+    cursor: pointer;
+}
+.group-close{
+    display: block;
+    width: 29px;
+    height: 29px;
+    padding: 5px;
+    border: 1px solid #333;
+    cursor: pointer;
+}
+.input-body-items{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}

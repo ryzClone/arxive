@@ -35,7 +35,6 @@ class AddUser extends Component {
         showModal: true,
         align: true,
       });
-      console.log(this.state.lastName);
 
       setTimeout(() => {
         this.setState({
@@ -86,6 +85,7 @@ class AddUser extends Component {
         <div className='Success-Block'>
           <div className='Success-Text'>{this.state.Success}</div>
         </div>
+
       );
     }
     return null;
@@ -103,7 +103,7 @@ class AddUser extends Component {
 
   render() {
     return (
-      <div className="add-user" id='Add-user' style={{alignItems:this.state ? "flex-start" : "center"}}>
+      <div className="add-user" id='Add-user'>
 
         <form onSubmit={this.handleSubmit} className='user-form'>
           <h1 className='user-title'>Add User</h1>

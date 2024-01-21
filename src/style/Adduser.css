@@ -22,6 +22,9 @@
     font-size: 32px;
     letter-spacing: 2px;
 }
+.name{
+    width: 100%;
+}
 .user-input{
     width: 100%;
     padding: 8px 0px 8px 20px;
