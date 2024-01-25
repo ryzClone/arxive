@@ -21,6 +21,7 @@
 .user-title{
     font-size: 32px;
     letter-spacing: 2px;
+    color: hsl(0, 3%, 39%);
 }
 .name{
     width: 100%;
@@ -28,6 +29,8 @@
 .user-input{
     width: 100%;
     padding: 8px 0px 8px 20px;
+    border: 1px solid hsl(0, 0%, 80%);
+    border-radius: 3px;
 }
 .user-input:focus{
     outline: none;
@@ -35,6 +38,9 @@
 .user-select{
     width: 100%;
     padding: 8px 0px 8px 20px;
+}
+.user-select-modal{
+    width: 100%;
 }
 .user-btn{
     padding: 10px 0px;

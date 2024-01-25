@@ -1,17 +1,39 @@
 import React, {Component } from "react";
+import { Link } from "react-router-dom";
 import "../style/Group.css";
 import FilterImg from "../png/section/aside/white-filter.png";
 import FilterClose from "../png/section/aside/close.png";
+import Select from 'react-select';
+import Update from "../png/section/aside/update.png"
+import Delete from "../png/section/aside/delete.png"
+
+const TableBeck = [
+  { GroupName:"Mobile" , Status:"Active" , serviceName:['mbms' , 'fre' , 'qwerty' , 'fggh' , 'hjjk']},
+  {GroupName:"Mobile" , Status:"Active" , serviceName:['mbms' , 'fre' , 'qwerty' , 'fggh' , 'hjjk']},
+  { GroupName:"Mobile" , Status:"Active" , serviceName:['mbms' , 'fre' , 'qwerty' , 'fggh' , 'hjjk']},
+  { GroupName:"Mobile" , Status:"Active" , serviceName:['mbms' , 'fre' , 'qwerty' , 'fggh' , 'hjjk']},
+  { GroupName:"Mobile" , Status:"Active" , serviceName:['mbms' , 'fre' , 'qwerty' , 'fggh' , 'hjjk']},
+  { GroupName:"Mobile" , Status:"Active" , serviceName:['mbms' , 'fre' , 'qwerty' , 'fggh' , 'hjjk']},
+]
 
 
-class Layout extends Component {
+const options = [
+  { value: 'All', label: 'All' },
+  { value: 'Active', label: 'Active' },
+  { value: 'noActive', label: 'noActive' },
+];
+
+class Group extends Component {
   constructor(props) {
     super(props);
     this.state = {
       name: '',
       status: 'All',
       group: '',
-      table: ''
+      table: '',
+      sort:1,
+      list:50,
+      DubleList:5,
     };
     this.display = {
       formDisplay: false,
@@ -46,16 +68,41 @@ class Layout extends Component {
 
     this.setState({
       name:'',
-      group:'',
-      table:'',
       status:'All',
     })
 
   }
 
-  handleStatusChange = (e) => {
-    this.setState({ status: e.target.value });
+  handleStatusChange = (status) => {
+    this.setState({ status }, () =>
+    this.state.status
+    );
   };
+
+  dubleSortMin = () => {
+    if(this.state.sort >= 3){
+        this.setState({sort: this.state.sort -2}) 
+    }
+}
+
+sortMin = () => {
+    if(this.state.sort >= 2) {
+      this.setState({sort: this.state.sort - 1}) 
+    }
+
+}
+
+sortMax = () => {
+    if(this.state.sort < Math.ceil(this.state.list / this.state.DubleList)){
+      this.setState({sort: this.state.sort + 1})
+    }
+}
+
+dubleSortMax = () => {
+  if(this.state.sort < Math.ceil(this.state.list / this.state.DubleList) - 1){
+    this.setState({sort: this.state.sort + 2})
+  }
+} 
 
   render() {
 
@@ -70,8 +117,7 @@ class Layout extends Component {
 
           <div className="group-main-items">
 
-            <button className="group-main-item-list1">+ Add new</button>
-
+            <Link to="/home/group/addgroup" className="group-main-item-list1" title="Transfer"> + Add new </Link>
             <button className="group-main-item-list2">Download</button>
 
             <button className="group-main-item-list3" onClick={this.formFiltre}>Filter</button>
@@ -91,41 +137,97 @@ class Layout extends Component {
 
             <label htmlFor="">Status</label>
 
-          <select name="status" id="" className="group-input" onChange={this.handleStatusChange} value={this.state.status} >
+          <div className="input-body-items">
 
-            <option value="">All</option>
-            <option value="active">Active</option>
-            <option value="noActive">No Active</option>
+            <Select value={this.state.status} onChange={this.handleStatusChange} options={options} className="group-input-select" />
 
-          </select>
+            <button type="submit" style={{border:"none"}} onClick={this.handleFormSubmites}>
+              <img src={FilterImg} alt="Submit" className="group-btn" />
+            </button>
 
-          </div>
-
-          <div className="input-body">
-            <label htmlFor="">Group</label>
-            <input type="text" name="group" value={this.state.group} className="group-input" onChange={this.handleInputChange} />
-          </div>
-
-          <div className="input-body">
-            <label htmlFor="">Table</label>
-            <div className="input-body-items">
-              <input type="text" name="table" value={this.state.table} className="group-input" onChange={this.handleInputChange} />
-
-              <button type="submit" style={{border:"none"}} onClick={this.handleFormSubmites}>
-                <img src={FilterImg} alt="Submit" className="group-btn" />
-              </button>
-
-              <button type="submit" style={{border:"none"}} onClick={this.handleFormClear}>
-                <img src={FilterClose} alt="Submit" className="group-close" />
-              </button>
+            <button type="submit" style={{border:"none"}} onClick={this.handleFormClear}>
+              <img src={FilterClose} alt="Submit" className="group-close" />
+            </button>
 
             </div>
+
           </div>
 
         </form>
 
-        <div className="group-section">
-          Section
+        <div className="Slide">
+
+          <div className="slide-menu">
+              <div className="sortBtn cursor" onClick={this.dubleSortMin}>{'<<'}</div>
+
+              <div className="sortBtn cursor" onClick={this.sortMin}> {'<'} </div>
+
+              <li className="sortBasc sortBtn">{this.state.sort}</li>
+
+              <div className="sortBtn cursor" onClick={this.sortMax}> {'>'} </div>
+
+              <div className="sortBtn cursor" onClick={this.dubleSortMax}> {'>>'} </div>
+          </div>
+
+
+          <div className="sortBtnList">
+              <select id="cars" onChange={event => { this.setState({DubleList: event.target.value , sort:1})}}>
+                  <option value={5} className="sortBtnList">5</option>
+                  <option value={10} className="sortBtnList">10</option>
+                  <option value={20} className="sortBtnList">20</option>
+                  <option value={25} className="sortBtnList">25</option>
+              </select>
+          </div>
+
+
+          <div className="sortBtn colorRed">Жами: {this.state.list}</div>
+
+        </div>
+
+        <div className="join-group-section">
+       
+          <table>
+
+              <thead>
+                <tr>
+                  <th>Id</th>
+                  <th>Group Name</th>
+                  <th>Status</th>
+                  <th className="join-group-table-center">Service Name</th>
+                  <th className="join-group-table-center"></th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {TableBeck.map((row, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{row.GroupName}</td>
+                  <td>{row.Status}</td>
+                  <td className="tbody-th-select">
+                    <ul className="tbody-ul">
+                      {row.serviceName.map((service, serviceIndex) => (
+                        <li key={serviceIndex} className="tbody-ul-li">{service}</li>
+                      ))}
+                    </ul>
+                  </td>
+                  <td className="join-group-table-tbody-btn">
+
+                    <button className="blue">
+                      <img src={Update} alt="" className="join-group-table-tbody-img"/>
+                    </button>
+
+                    <button className="red">
+                      <img src={Delete} alt="" className="join-group-table-tbody-img" />
+                    </button>
+
+                  </td>
+                </tr>
+              ))}
+              </tbody>
+
+          </table>
+
         </div>
 
      </div>
@@ -133,4 +235,4 @@ class Layout extends Component {
   }
 }
 
-export default Layout;
+export default Group;

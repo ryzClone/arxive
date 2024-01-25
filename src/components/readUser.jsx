@@ -9,10 +9,10 @@ const TableBeck = [
   {GroupName:"Mobile" , Status:"Active" , serviceName:['mbms' , 'fre' , 'qwerty' , 'fggh' , 'hjjk']},
   { GroupName:"Mobile" , Status:"Active" , serviceName:['mbms' , 'fre' , 'qwerty' , 'fggh' , 'hjjk']},
   { GroupName:"Mobile" , Status:"Active" , serviceName:['mbms' , 'fre' , 'qwerty' , 'fggh' , 'hjjk']},
-  { GroupName:"Mobile" , Status:"Active" , serviceName:['mbms' , 'fre' , 'qwerty' , 'fggh' , 'hjjk' , 'fre' , 'qwerty' , 'fggh' , 'hjjk', 'fre' , 'qwerty' , 'fggh' , 'hjjk' , 'mbms' , 'fre' , 'qwerty' , 'fggh' , 'hjjk' , 'fre' , 'qwerty' , 'fggh' , 'hjjk', 'fre' , 'qwerty' , 'fggh' , 'hjjk']},
+  { GroupName:"Mobile" , Status:"Active" , serviceName:['mbms' , 'fre' , 'qwerty' , 'fggh' , 'hjjk']},
 ]
 
-class JoinGroup extends Component {
+class ReadUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,7 +22,7 @@ class JoinGroup extends Component {
     };
   }
 
-  dubleSortMin = () => {
+dubleSortMin = () => {
     if(this.state.sort >= 3){
         this.setState({sort: this.state.sort -2}) 
     }
@@ -47,6 +47,7 @@ dubleSortMax = () => {
   }
 } 
 
+
   render() {
 
     return (
@@ -55,40 +56,40 @@ dubleSortMax = () => {
       <div className="join-group-header">
 
         <div className="join-group-header-title">
-          Join Group
+          Users
         </div>
 
 
-        <Link to="/home/joingroup/adduserjoin" className="join-group-header-btn" title="Transfer">  Add Service to Group </Link>
+        <Link to="/home/readuser/adduser" className="join-group-header-btn" title="Transfer">  Add User </Link>
 
       </div>
 
       <div className="Slide">
 
-        <div className="slide-menu">
-            <div className="sortBtn cursor" onClick={this.dubleSortMin}>{'<<'}</div>
+                <div className="slide-menu">
+                    <div className="sortBtn cursor" onClick={this.dubleSortMin}>{'<<'}</div>
 
-            <div className="sortBtn cursor" onClick={this.sortMin}> {'<'} </div>
+                    <div className="sortBtn cursor" onClick={this.sortMin}> {'<'} </div>
 
-            <li className="sortBasc sortBtn">{this.state.sort}</li>
+                    <li className="sortBasc sortBtn">{this.state.sort}</li>
 
-            <div className="sortBtn cursor" onClick={this.sortMax}> {'>'} </div>
+                    <div className="sortBtn cursor" onClick={this.sortMax}> {'>'} </div>
 
-            <div className="sortBtn cursor" onClick={this.dubleSortMax}> {'>>'} </div>
-        </div>
-
-
-        <div className="sortBtnList">
-            <select id="cars" onChange={event => { this.setState({DubleList: event.target.value , sort:1})}}>
-                <option value={5} className="sortBtnList">5</option>
-                <option value={10} className="sortBtnList">10</option>
-                <option value={20} className="sortBtnList">20</option>
-                <option value={25} className="sortBtnList">25</option>
-            </select>
-        </div>
+                    <div className="sortBtn cursor" onClick={this.dubleSortMax}> {'>>'} </div>
+                </div>
 
 
-        <div className="sortBtn colorRed">Жами: {this.state.list}</div>
+                <div className="sortBtnList">
+                    <select id="cars" onChange={event => { this.setState({DubleList: event.target.value , sort:1})}}>
+                        <option value={5} className="sortBtnList">5</option>
+                        <option value={10} className="sortBtnList">10</option>
+                        <option value={20} className="sortBtnList">20</option>
+                        <option value={25} className="sortBtnList">25</option>
+                    </select>
+                </div>
+
+
+                <div className="sortBtn colorRed">Жами: {this.state.list}</div>
 
       </div>
 
@@ -143,4 +144,4 @@ dubleSortMax = () => {
   }
 }
 
-export default JoinGroup;
+export default ReadUser;

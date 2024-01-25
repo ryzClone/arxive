@@ -140,17 +140,17 @@ class Layout extends Component {
 
               </Link>
 
-              <Link to="/home/blogs" className="link" title="Add-User">
+              <Link to="/home/readuser" className="link" title="Add-User">
 
                   <img src={AddUser} alt="" style={{width:"25px" , height:"25px" , filter: "brightness(0) invert(1)"}}/>
 
                   <div className="linkText">
-                    Add-User
+                    User
                   </div>
 
               </Link>
 
-              <Link to="/home/contact" className="link" title="Transfer">
+              <Link to="/home/transfer" className="link" title="Transfer">
                   <img src={Transfer} alt="" style={{width:"25px" , height:"25px" , filter: "brightness(0) invert(1)"}}/>
 
                   <div className="linkText">
@@ -168,11 +168,11 @@ class Layout extends Component {
                   
               </Link>
 
-              <Link to="/home/service" className="link" title="Service">
+              <Link to="/home/host" className="link" title="Service">
                   <img src={Service} alt="" style={{width:"25px" , height:"25px" , filter: "brightness(0) invert(1)"}}/>
 
                   <div className="linkText">
-                    Service
+                    Host
                   </div>
                   
               </Link>
