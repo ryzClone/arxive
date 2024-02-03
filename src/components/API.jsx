@@ -1,0 +1,1 @@
+export const READ_USER_API = "http://localhost:8081/user/list";

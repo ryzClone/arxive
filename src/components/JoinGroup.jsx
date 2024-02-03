@@ -47,6 +47,12 @@ dubleSortMax = () => {
   }
 } 
 
+componentDidMount = () => {
+  if(localStorage.getItem('Role') === "ROLE_USER"){
+    window.location.pathname = "/home"
+  }
+}
+
   render() {
 
     return (

@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
 import "../style/Adduser.css";
 import Select from 'react-select';
+import Success from './SucsesFull';
 
 
 const role = [
-  { value: 'ROLE_User', label: 'ROLE_User' },
-  { value: 'ROLE_Admin', label: 'ROLE_Admin' },
-  { value: 'ROLE_Moderator', label: 'ROLE_Moderator' },
+  { value: 'ROLE_USER', label: 'User' },
+  { value: 'ROLE_ADMIN', label: 'Admin' },
+  { value: 'ROLE_MODERATOR', label: 'Moderator' },
 ];
 
 const status = [
-  { value: 'Active', label: 'Active' },
-  { value: 'noActive', label: 'noActive' },
+  { value: true, label: 'Active' },
+  { value: false, label: 'No active' },
 ];
 
 class AddUser extends Component {
@@ -26,6 +27,8 @@ class AddUser extends Component {
         Success: '',
         status:"",
         role:"",
+        text:"",
+        color: false,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -34,23 +37,65 @@ class AddUser extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
 
-    this.setState({
-      lastName: '',
-      firstName: '',
-      userName: '',
-      password: '',
-      showSuccess: '',
-      Success: '',
-      status:"Active",
-      role:"ROLE_User",
-    });
-    console.log(this.state);
-
     setTimeout(() => {
       this.setState({
         showSuccess: false,
       });
     }, 3000);
+
+    const firstName = this.state.firstName;
+    const lastName = this.state.lastName;
+    const username = this.state.userName;
+    const password = this.state.password;
+    const role = this.state.role.value;
+    const status = this.state.status.value;
+
+    const data = {
+      firstName,
+      lastName,
+      username,
+      password,
+      role,
+      status,
+    };
+
+
+    fetch("http://localhost:8081/auth/register", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${this.getAccessToken()}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({
+          text: data.message,
+          showSuccess:true,
+          color:data.success,
+        })
+      
+      })
+      .catch((error) => {
+        console.error("Xatolik yuz berdi:", error);
+      });
+
+      this.setState({
+        lastName: '',
+        firstName: '',
+        userName: '',
+        password: '',
+        showSuccess: '',
+        Success: '',
+        status:"Active",
+        role:"ROLE_User",
+      });
+
+  };
+
+   getAccessToken = () => {
+    return localStorage.getItem("jwtToken");
   };
 
 
@@ -62,9 +107,7 @@ class AddUser extends Component {
   renderSuccessMessage() {
     if (this.state.showSuccess) {
       return (
-        <div className='Success-Block'>
-          <div className='Success-Text'>{this.state.Success}</div>
-        </div>
+        <Success title={this.state.text} background={this.state.color}/>
       );
     }
     return null;
@@ -77,9 +120,17 @@ class AddUser extends Component {
   };
 
   handleStatus = (status) => {
+
     this.setState({ status }, () =>
-    this.state.status
-  );
+      this.state.status
+    );
+
+  }
+
+  componentDidMount = () => {
+    if(localStorage.getItem('Role') === "ROLE_USER"){
+      window.location.pathname = "/homes"
+    }
   }
 
   render() {
@@ -97,7 +148,7 @@ class AddUser extends Component {
               value={this.state.firstName}
               onChange={this.handleInputChange}
               className='user-input'
-              placeholder='firstName'
+              placeholder='Firstname'
               required
             />
 
@@ -107,7 +158,7 @@ class AddUser extends Component {
               value={this.state.lastName}
               onChange={this.handleInputChange}
               className='user-input'
-              placeholder='lastName'
+              placeholder='Lastname'
               required
             />
           </div>
@@ -118,7 +169,7 @@ class AddUser extends Component {
             value={this.state.userName}
             onChange={this.handleInputChange}
             className='user-input'
-            placeholder='username'
+            placeholder='Username'
             required
           />
 
@@ -135,6 +186,7 @@ class AddUser extends Component {
           <Select value={this.state.role} onChange={this.handleChange} options={role} className='user-select-modal' />
 
           <Select value={this.state.status} onChange={this.handleStatus} options={status} className='user-select-modal' />
+
 
           <button type='submit' className='user-btn'>
             Submit

@@ -2,7 +2,6 @@ import React, {Component } from "react";
 import { Outlet, Link } from "react-router-dom";
 import "../style/layout.css";
 import Logo from "../img/section/logo1.png";
-import faSearch from "../png/section/aside/search-black.png";
 import Transfer from "../png/section/aside/transfer.png";
 import Home from "../png/section/aside/home.png";
 import AddUser from "../png/section/aside/addUser.png";
@@ -37,22 +36,25 @@ class Layout extends Component {
 
   Hamburger = () => {
     const DropdownAll = document.querySelectorAll('.linkText');
-    const Search = document.querySelector('.search');
     const Logo = document.querySelector('.logo-item');
     const wrappers = document.querySelector('.wrappers');
+    const NavBar = document.getElementById('navbar-body');
   
   
     DropdownAll.forEach((element) => {
       if (element.style.display === '') {
         element.style.display = 'none';
-        Search.style.display = 'none';
         Logo.style.display = 'none';
         wrappers.style.width = '60px';
+        wrappers.style.minWidth = '60px';
+        NavBar.style.marginLeft = "60px";
+
       } else {
         element.style.display = '';
-        Search.style.display = 'flex';
         Logo.style.display = 'flex';
         wrappers.style.width = '17%';
+        wrappers.style.minWidth = '15%';
+        NavBar.style.marginLeft = "15%";
       }
     });
   }
@@ -77,12 +79,18 @@ class Layout extends Component {
     }
   }
 
+   clearLocalstorage = () => {
+    localStorage.removeItem("jwtToken");
+    localStorage.removeItem('UserName');
+    localStorage.removeItem('Role');
+
+  };
+
   
 
   
 
   render() {
-    const { searchText } = this.state;
     const { isDisplayed } = this.state;
     
 
@@ -111,23 +119,6 @@ class Layout extends Component {
               </div>
             </div>
 
-            <div className="search">
-              <input
-                type="text"
-                placeholder="Search..."
-                className="inputs"
-                value={searchText}
-                onChange={this.handleInputChange}
-              />
-              <div className="search-icon">
-                <img
-                  src={faSearch}
-                  alt=""
-                  style={{ width: "20px", height: "20px" }}
-                />
-              </div>
-            </div>
-
             <div className="dropdown">
 
               <Link to="/home" className="link" title="Home">
@@ -140,7 +131,7 @@ class Layout extends Component {
 
               </Link>
 
-              <Link to="/home/readuser" className="link" title="Add-User">
+              <Link to="/home/readuser" className="link" title="Add-User" style={{display: localStorage.Role === "ROLE_ADMIN" ? "flex" : "none"}}>
 
                   <img src={AddUser} alt="" style={{width:"25px" , height:"25px" , filter: "brightness(0) invert(1)"}}/>
 
@@ -150,7 +141,7 @@ class Layout extends Component {
 
               </Link>
 
-              <Link to="/home/transfer" className="link" title="Transfer">
+              <Link to="/home/transfer" className="link" title="Transfer" style={{display: localStorage.Role === "ROLE_ADMIN" ? "flex" : "none"}}>
                   <img src={Transfer} alt="" style={{width:"25px" , height:"25px" , filter: "brightness(0) invert(1)"}}/>
 
                   <div className="linkText">
@@ -159,7 +150,7 @@ class Layout extends Component {
                   
               </Link>
 
-              <Link to="/home/group" className="link" title="Group">
+              <Link to="/home/group" className="link" title="Group" style={{display: localStorage.Role === "ROLE_ADMIN" ? "flex" : "none"}}>
                   <img src={Group} alt="" style={{width:"25px" , height:"25px" , filter: "brightness(0) invert(1)"}}/>
 
                   <div className="linkText">
@@ -168,7 +159,7 @@ class Layout extends Component {
                   
               </Link>
 
-              <Link to="/home/host" className="link" title="Service">
+              <Link to="/home/host" className="link" title="Host" style={{display: localStorage.Role === "ROLE_ADMIN" ? "flex" : "none"}}>
                   <img src={Service} alt="" style={{width:"25px" , height:"25px" , filter: "brightness(0) invert(1)"}}/>
 
                   <div className="linkText">
@@ -177,7 +168,7 @@ class Layout extends Component {
                   
               </Link>
 
-              <Link to="/home/joingroup" className="link" title="Service">
+              <Link to="/home/joingroup" className="link" title="JoinGroup" style={{display: localStorage.Role === "ROLE_ADMIN" ? "flex" : "none"}}>
                   <img src={Service} alt="" style={{width:"25px" , height:"25px" , filter: "brightness(0) invert(1)"}}/>
 
                   <div className="linkText">
@@ -190,7 +181,7 @@ class Layout extends Component {
 
         </div>
 
-          <div className="navbar">
+          <div className="navbar" id="navbar-body">
 
             <div className="nav-item">
 
@@ -203,6 +194,18 @@ class Layout extends Component {
               </div>
 
               <div className="right-body">
+
+                <div className="localStorage">
+
+                  <div className="localStorage-username">
+                    <p>Username: </p> {localStorage.getItem('UserName').toUpperCase()}
+                  </div>
+
+                  <div className="localStorage-username">
+                    <p>Role: </p> {localStorage.getItem('Role') === "ROLE_ADMIN" ? "Admin" : "User"}
+                  </div>
+
+                </div>
 
                 <div className="language">
 
@@ -226,7 +229,7 @@ class Layout extends Component {
 
                 </div>
 
-                <Link to="/" className="logout">
+                <Link to="/" onClick={this.clearLocalstorage} className="logout">
 
                   <img src={LogOut} alt="" style={{width:"25px" , height:"25px"}}/>
 

@@ -1,11 +1,13 @@
 .block{
   display: flex;
-    background-color: #fff;
+  background-color: #fff;
 }
 /* Wrapper ######################################################3 */
 .wrappers{
-    width: 17%;
-    min-height: 100vh;
+    position: fixed;
+    min-width: 15%;
+    max-width: 15%;
+    height: 100vh;
     background-color: #343a40;
     color: #fff;
     font-size: 11px;
@@ -95,10 +97,12 @@
 /* navbar #################################################### */
 .navbar{
   width: 100%;
+  margin-left: 15%;
   background-color: white;
   height: 50px;
   box-shadow: 0px 0px 8px #cecaca;
   padding: 10px;
+  transition: all 0.3s ease;
 }
 .nav-item{
   display: flex;
@@ -192,4 +196,16 @@ background-color: #acaaaa;
 .Language-body-img{
   width: 30px;
   height: 30px;
+}
+/* localStorage #################################################### */
+.localStorage{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.localStorage-username{
+  display: flex;
+  gap: 5px;
 }

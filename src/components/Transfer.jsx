@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import "../style/transfer.css";
+import Select from 'react-select';
+
+const service = [];
 
 class Transfer extends Component {
   constructor(props) {
@@ -11,9 +14,8 @@ class Transfer extends Component {
       input3: '',
       input4: '',
       input5: '',
-      selectedValue: 'option1',
       folder: '',
-      select: false,
+      select: service,
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -44,29 +46,50 @@ class Transfer extends Component {
   
   }
 
-  handleChange = (event) => {
-    this.setState({ selectedValue: event.target.value });
-  };
+  handleStatus = (status) => {
 
-  handleSelect = () => {
-    this.setState((prevState) => ({ select: !prevState.select }));
-  };
+    this.setState({ status }, () =>
+      this.state.status
+    );
 
-  addHost = () => {
-    document.querySelector('.action-form-background').style.display = "flex"
-    document.querySelector('.action-select').style.display = "flex"
+  console.log(status);
+  }
+  
+  componentDidMount = () => {
+    if(localStorage.getItem('Role') === "ROLE_USER"){
+      window.location.pathname = "/home"
+    }
+
+
+    fetch("http://localhost:8081/service/all/list", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${this.getAccessToken()}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+          data.data.forEach(element => {
+
+          const isElementExists = service.some(item => item.value === element.id || item.id === element.name);
+
+          if (!isElementExists) {
+            service.push({ value: element.id, label: element.name });
+          }
+
+        });
+      })
+      .catch((error) => {
+        console.error("Xatolik yuz berdi:", error);
+      });
+
+  }
+
+  getAccessToken = () => {
+    return localStorage.getItem("jwtToken");
   };
-  closeSelect = () => {
-    document.querySelector('.action-form-background').style.display = "none"
-    document.querySelector('.action-select').style.display = "none"
-  }
-  addBackHost = () => {
-    console.log(this.state.input1);
-    console.log(this.state.input2);
-    console.log(this.state.input3);
-    console.log(this.state.input4);
-    console.log(this.state.input5);
-  }
 
   render() {
     return (
@@ -78,31 +101,21 @@ class Transfer extends Component {
 
             <div className='form-left'>
 
-              <h1>Qayerdan</h1>
+              <h1>From Server</h1>
 
               <label htmlFor="" className='form-label'>
-                Select
-                <select name="" id="" className='form-select' value={this.state.selectedValue} onChange={this.handleChange}>
-                  <option value="option1" disabled>
-                    Choose host
-                  </option>
-                  <option value="option2" className='form-select'>Option 2</option>
-                  <option value="option3" className='form-select'>Option 3</option>
-                  <option value="option4" className='form-select'>Option 4</option>
-                </select>
+                Service
+                <Select value={this.state.service} onChange={this.handleStatus} options={service} className='user-select-modal' />
               </label>
-              <div id="form-label-demo"></div>
-
-              <button type="button" className='form-btn' onClick={this.addHost}>Add host</button>
 
             </div>
 
             <div className='form-left'>
 
-              <h1>Qayerga</h1>
+              <h1>To Server</h1>
 
               <label htmlFor="" className='form-label'>
-                Folder
+                Path Folder
                 <input
                   type="text"
                   name="folder"
@@ -119,79 +132,6 @@ class Transfer extends Component {
 
           <button type="submit" className='form-btn'>Transfer</button>
         </form>
-
-        <div className="action-form-background"></div>
-
-          <form className='action-select'>
-
-            <div className="close-action-select" onClick={this.closeSelect}>
-              <span></span>
-              <span></span>
-            </div>
-
-            <label htmlFor="" className='form-label'>
-              Host
-              <input
-                type="text"
-                name="input1"
-                className='form-input'
-                value={this.state.input1}
-                onChange={this.handleInputChange}
-                required
-              />
-            </label>
-
-            <label htmlFor="" className='form-label'>
-              Port
-              <input
-                type="text"
-                name="input2"
-                className='form-input'
-                value={this.state.input2}
-                onChange={this.handleInputChange}
-                required
-              />
-            </label>
-
-            <label htmlFor="" className='form-label'>
-              Username
-              <input
-                type="text"
-                name="input3"
-                className='form-input'
-                value={this.state.input3}
-                onChange={this.handleInputChange}
-                required
-              />
-            </label>
-
-            <label htmlFor="" className='form-label'>
-              Password
-              <input
-                type="text"
-                name="input4"
-                className='form-input'
-                value={this.state.input4}
-                onChange={this.handleInputChange}
-                required
-              />
-            </label>
-
-            <label htmlFor="" className='form-label'>
-              Remote folder location
-              <input
-                type="text"
-                name="input5"
-                className='form-input'
-                value={this.state.input5}
-                onChange={this.handleInputChange}
-                required
-              />
-            </label>
-
-            <button className='form-btn-action' onClick={this.addBackHost}>Add host</button>
-
-          </form>
 
       </div>
     );

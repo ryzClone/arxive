@@ -2,14 +2,15 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    padding: 0px 10px;
+    padding: 20px 10px;
     gap: 20px;
 }
 .join-group-header{
     width: 100%;
     display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     justify-content: space-between;
-    align-items: center;
 }
 .join-group-header-title{
     font-size: 24px;
@@ -137,3 +138,179 @@
     outline: none;
   }
  
+  .readUserSrcUpdate{
+    width: 30px;
+    height: 30px;
+    background-color: #1890ff;
+    border: none;
+    padding: 5px 5px;
+  }
+
+  .readUserSrcDelete{
+    width: 30px;
+    height: 30px;
+    background-color: #a30041;
+    border: none;
+    padding: 5px 5px;
+  }
+  .readUserSrcBody{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    border: none;
+  }
+  .readUserBtn{
+    border: none;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+  }
+  .join-group-table-center{
+    width: 10%;
+  }
+  .join-group-header-body{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .join-group-header-body-form{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin: 20px 0px;
+  }
+
+  .modalDelete{
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    width: 100%;
+    height: 100%;
+    background-color: #343a40;
+    opacity: 40%;
+  }
+  .modal-delete-body{
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    padding-top: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    opacity: 100%;
+    z-index: 5;
+  }
+  .formModalBtn{
+    display: none;
+    width: 500px;
+    border: 1px solid #fff;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .formModalBtn-inputs{
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+  .formModalBtn-inputs-label{
+    min-width: 25%;
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .formModalBtn-inputs-item{
+    width: 78%;
+    padding: 9px 0px 10px 10px;
+    border: 1px solid hsl(0, 0%, 80%);
+    border-radius: 3px;
+  }
+  .formModalBtn-inputs-item:focus{
+    outline: none;
+    border:1px solid #1890ff;
+  }
+  .formModalBtn-inputs-btn{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+  }
+  .formModalBtn-inputs-btn-item-blue{
+    background-color: #1890ff;
+    border: 1px solid #1890ff;
+    color: #fff;
+    padding: 10px 80px;
+    margin-top: 20px;
+    border-radius: 3px;
+  }
+
+  .formModalBtn-inputs-btn-item-red{
+    background-color: #a30041;
+    border: 1px solid #a30041;
+    color: #fff;
+    padding: 10px 80px;
+    margin-top: 20px;
+    border-radius: 3px;
+  }
+  .formModalBtn h1{
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-align: center;
+    margin: 10px 0px;
+  }
+  .formModalDelete{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+  }
+  .formModalDelete-forms{
+    width: 300px;
+    height: 100px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-radius: 3px;
+    margin-top: 20px;
+    padding: 20px;
+  }
+  .formModalDelete-title{
+    font-size: 18px;
+  }
+  .formModalDelete-btn-body{
+    display: flex;
+    gap: 20px;
+    justify-content: flex-end;
+  }
+  .formModalDelete-btn-body-btn{
+    padding: 6px 10px;
+    font-size: 14px;
+    color: #fff;
+    border-radius: 5px;
+  }
+  .green {
+    border: 1px solid green;
+    background-color: green;
+    cursor: pointer;
+  }
+
+  .red {
+    border: 1px solid #a30041;
+    background-color: #a30041;
+    cursor: pointer;
+  }

@@ -35,14 +35,44 @@ export default class LoginPage extends React.Component {
     }
   };
 
+  componentDidMount = () => {
+    if(localStorage.getItem('jwtToken')){
+      window.location.pathname = "/home"
+    }
+  }
+
   handleSubmit = (e) => {
     e.preventDefault();
-    if (this.state.login === "" || this.state.password === "") {
-      alert("Login and password are required!");
-    } else {
-      localStorage.setItem('username', 'john_doe');
-      window.location.pathname = "/home";
+    const username = this.state.login;
+    const password = this.state.password;
+    
+    const data = {
+      username,
+      password,
     }
+
+    fetch("http://localhost:8081/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.data.token) {
+          localStorage.setItem("jwtToken", data.data.token);
+          localStorage.setItem("UserName", data.data.username);
+          localStorage.setItem("Role", data.data.role);
+          window.location.pathname = "/home";
+        }else{
+          console.log(data.data.message);
+        }
+      })
+      .catch((error) => {
+        console.log('Username or Password wrong !!!');
+      });
+
   };
 
   render() {

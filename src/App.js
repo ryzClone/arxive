@@ -17,21 +17,23 @@ import AddHost from './components/AddHost';
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<LoginPage />} />
-      <Route path="/home" element={<Layout />}>
-        <Route index element={<ZipFiles />} />  
-        <Route path="/home/readuser/" element={<ReadUser />} />
-        <Route path="/home/readuser/adduser" element={<Adduser />} />
-        <Route path="/home/transfer" element={<Transfer />} />
-        <Route path="/home/group" element={<Group />} />
-        <Route path="/home/group/addgroup" element={<AddGroup />} />
-        <Route path="/home/host" element={<Host />} />
-        <Route path="/home/host/addhost" element={<AddHost />} />
-        <Route path="/home/joingroup" element={<JoinGroup />} />
-        <Route path="/home/joingroup/adduserjoin" element={<AddUserJoin />} />
-        <Route path="/home/*" element={<NoPage />} />
-      </Route>
-    </Routes>
+
+<Routes>
+    <Route path="/" element={<LoginPage />} />
+    <Route path="/home" element={<Layout />}>
+      <Route index element={<ZipFiles />} />  
+      <Route path="/home/readuser/" element={<ReadUser />} />
+      <Route path="/home/readuser/adduser" element={<Adduser />} />
+      <Route path="/home/transfer" element={<Transfer />} />
+      <Route path="/home/group" element={<Group />} />
+      <Route path="/home/group/addgroup" element={<AddGroup />} />
+      <Route path="/home/host" element={<Host />} />
+      <Route path="/home/host/addhost" element={<AddHost />} />
+      <Route path="/home/joingroup" element={<JoinGroup />} />
+      <Route path="/home/joingroup/adduserjoin" element={<AddUserJoin />} />
+      <Route path="/home/*" element={<NoPage />} />
+    </Route>
+</Routes>
+
   );
 }

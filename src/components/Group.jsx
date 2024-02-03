@@ -8,12 +8,12 @@ import Update from "../png/section/aside/update.png"
 import Delete from "../png/section/aside/delete.png"
 
 const TableBeck = [
-  { GroupName:"Mobile" , Status:"Active" , serviceName:['mbms' , 'fre' , 'qwerty' , 'fggh' , 'hjjk']},
-  {GroupName:"Mobile" , Status:"Active" , serviceName:['mbms' , 'fre' , 'qwerty' , 'fggh' , 'hjjk']},
-  { GroupName:"Mobile" , Status:"Active" , serviceName:['mbms' , 'fre' , 'qwerty' , 'fggh' , 'hjjk']},
-  { GroupName:"Mobile" , Status:"Active" , serviceName:['mbms' , 'fre' , 'qwerty' , 'fggh' , 'hjjk']},
-  { GroupName:"Mobile" , Status:"Active" , serviceName:['mbms' , 'fre' , 'qwerty' , 'fggh' , 'hjjk']},
-  { GroupName:"Mobile" , Status:"Active" , serviceName:['mbms' , 'fre' , 'qwerty' , 'fggh' , 'hjjk']},
+  { GroupName:"Mobile" , Status:"Active" , serviceName:[{name:"qwe" , id:1} , {name:"asd" , id:2} , {name:"zxc" , id:3} , {name:"vbn" , id:4} , {name:"fhg" , id:5}]},
+  { GroupName:"Mobile" , Status:"Active" , serviceName:[{name:"qwe" , id:1} , {name:"asd" , id:2} , {name:"zxc" , id:3} , {name:"vbn" , id:4} , {name:"fhg" , id:5}]},
+  { GroupName:"Mobile" , Status:"Active" , serviceName:[{name:"qwe" , id:1} , {name:"asd" , id:2} , {name:"zxc" , id:3} , {name:"vbn" , id:4} , {name:"fhg" , id:5}]},
+  { GroupName:"Mobile" , Status:"Active" , serviceName:[{name:"qwe" , id:1} , {name:"asd" , id:2} , {name:"zxc" , id:3} , {name:"vbn" , id:4} , {name:"fhg" , id:5}]},
+  { GroupName:"Mobile" , Status:"Active" , serviceName:[{name:"qwe" , id:1} , {name:"asd" , id:2} , {name:"zxc" , id:3} , {name:"vbn" , id:4} , {name:"fhg" , id:5}]},
+  { GroupName:"Mobile" , Status:"Active" , serviceName:[{name:"qwe" , id:1} , {name:"asd" , id:2} , {name:"zxc" , id:3} , {name:"vbn" , id:4} , {name:"fhg" , id:5}]},
 ]
 
 
@@ -103,6 +103,15 @@ dubleSortMax = () => {
     this.setState({sort: this.state.sort + 2})
   }
 } 
+
+componentDidMount = () => {
+  if(localStorage.getItem('Role') === "ROLE_USER"){
+    window.location.pathname = "/home"
+  }
+
+
+  
+}
 
   render() {
 
@@ -200,14 +209,14 @@ dubleSortMax = () => {
 
               <tbody>
                 {TableBeck.map((row, index) => (
-                <tr key={index}>
+                <tr key={index} style={{margin:"10px 0px"}}>
                   <td>{index + 1}</td>
                   <td>{row.GroupName}</td>
                   <td>{row.Status}</td>
                   <td className="tbody-th-select">
                     <ul className="tbody-ul">
                       {row.serviceName.map((service, serviceIndex) => (
-                        <li key={serviceIndex} className="tbody-ul-li">{service}</li>
+                        <li key={serviceIndex} className="tbody-ul-li">{service.name}</li>
                       ))}
                     </ul>
                   </td>

@@ -41,6 +41,7 @@ class AddUserJoin extends Component {
     this.setState({ users }, () =>
       this.state.users
     );
+    console.log('Hello Wolrd');
   };  
 
   handleStatusChangeStatus = (status) => {
@@ -63,12 +64,20 @@ class AddUserJoin extends Component {
 
   sendFromSubmit = () => {
 
-    console.log(this.state);
-
     this.setState({
       status:'',
     })
 
+  }
+  
+    Loger = () => {
+      console.log('Hello World');
+    }
+
+  componentDidMount = () => {
+    if(localStorage.getItem('Role') === "ROLE_USER"){
+      window.location.pathname = "/home"
+    }
   }
 
 
@@ -76,8 +85,6 @@ class AddUserJoin extends Component {
     return (
       
     <div className="add-service">
-
-
         <form action="" className="add-service-form" onClick={this.handleFormSubmit }>
 
           <h1>Add User to Group</h1>
