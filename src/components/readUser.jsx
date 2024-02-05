@@ -7,12 +7,18 @@ import Update from "../png/section/aside/update.png";
 import Delete from "../png/section/aside/delete.png";
 import Select from 'react-select';
 import Success from "./SucsesFull";
-import data from "data";
 
+const TableBeck = [
+  { index:"1" ,username:"Mobile" , status:"Active" , groupname:"mbms" , lastName:"jumayev" , firstName:"ozodbek"},
+  { index:"2" ,username:"Mobile" , status:"Active" , groupname:"mbms" , lastName:"jumayev" , firstName:"ozodbek"},
+  { index:"3" ,username:"Mobile" , status:"Active" , groupname:"mbms" , lastName:"jumayev" , firstName:"ozodbek"},
+  { index:"4" ,username:"Mobile" , status:"Active" , groupname:"mbms" , lastName:"jumayev" , firstName:"ozodbek"},
+  { index:"5" ,username:"Mobile" , status:"Active" , groupname:"mbms" , lastName:"jumayev" , firstName:"ozodbek"},
+  { index:"6" ,username:"Mobile" , status:"Active" , groupname:"mbms" , lastName:"jumayev" , firstName:"ozodbek"},
+]
 
 const ReadUser = () => {
   const [sort, setSort] = useState(1);
-  const [sorts, setSorts] = useState(1);
   const [list, setList] = useState(50);
   const [DubleList, setDubleList] = useState(10);
   const [Display, setDisplay] = useState(false);
@@ -85,7 +91,6 @@ const ReadUser = () => {
       page,
       size,
     };
-    console.log('data',data);
 
     fetch("http://localhost:8081/user/list", {
       method: "POST",
@@ -103,6 +108,7 @@ const ReadUser = () => {
       .catch((error) => {
         console.error("Xatolik yuz berdi:", error);
       });
+      TableBackUser(TableBeck)
   };
 
   const getAccessToken = () => {
@@ -114,6 +120,8 @@ const ReadUser = () => {
     Tbody.innerHTML = '';
 
     data.forEach((element) => {
+      console.log(element);
+
       let tr = document.createElement('tr');
 
       let tdId = document.createElement('td');
@@ -147,7 +155,7 @@ const ReadUser = () => {
       tr.appendChild(tdStatus);
 
       let tdBtn = document.createElement('td');
-      tdBtn.classList = "readUserSrcBody";
+      tdBtn.classList = "readUserSrcBody padding";
       let Updates = document.createElement('button');
       let Deletes = document.createElement('button');
       let imgUpdate = document.createElement('img');
@@ -327,7 +335,6 @@ const ReadUser = () => {
       );
     }
   }
-
 
   return (
   <div className="join-group">

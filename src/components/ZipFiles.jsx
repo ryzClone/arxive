@@ -193,7 +193,7 @@ componentDidMount = () => {
 
               <tbody>
                 {TableBeck.map((row, index) => (
-                <tr key={index}>
+                <tr key={index} className="table-tbody-tr">
                   <td>{index + 1}</td>
                   <td>{row.GroupName}</td>
                   <td>{row.Status}</td>

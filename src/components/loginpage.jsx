@@ -51,27 +51,32 @@ export default class LoginPage extends React.Component {
       password,
     }
 
-    fetch("http://localhost:8081/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.data.token) {
-          localStorage.setItem("jwtToken", data.data.token);
-          localStorage.setItem("UserName", data.data.username);
-          localStorage.setItem("Role", data.data.role);
-          window.location.pathname = "/home";
-        }else{
-          console.log(data.data.message);
-        }
-      })
-      .catch((error) => {
-        console.log('Username or Password wrong !!!');
-      });
+    // fetch("http://localhost:8081/auth/login", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(data),
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     if (data.data.token) {
+    //       localStorage.setItem("jwtToken", data.data.token);
+    //       localStorage.setItem("UserName", data.data.username);
+    //       localStorage.setItem("Role", data.data.role);
+    //       window.location.pathname = "/home";
+    //     }else{
+    //       console.log(data.data.message);
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log('Username or Password wrong !!!');
+    //   });
+    window.location.pathname = "/";
+    localStorage.setItem("jwtToken", "Admin");
+    localStorage.setItem("UserName", 'Ozodbek');
+    localStorage.setItem("Role", "ROLE_ADMIN");
+
 
   };
 

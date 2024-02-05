@@ -7,38 +7,34 @@ import Update from "../png/section/aside/update.png";
 import Delete from "../png/section/aside/delete.png";
 import Select from 'react-select';
 import Success from "./SucsesFull";
-import makeAnimated from 'react-select/animated';
-
-const animatedComponents = makeAnimated();
 
 const TableBeck = [
-  { index:"1" ,groupname:"Mobile" , status:"true" , servicename:[{name:"qwe" , id:1} , {name:"asd" , id:2} , {name:"zxc" , id:3} , {name:"vbn" , id:4} , {name:"fhg" , id:5}]},
-  { index:"2" ,groupname:"ssd" , status:"false" , servicename:[{name:"qwe" , id:1} , {name:"asd" , id:2} , {name:"zxc" , id:3} , {name:"vbn" , id:4} , {name:"fhg" , id:5}]},
-  { index:"4" ,groupname:"bbn" , status:"true" , servicename:[{name:"qwe" , id:1} , {name:"asd" , id:2} , {name:"zxc" , id:3} , {name:"vbn" , id:4} , {name:"fhg" , id:5}]},
-  { index:"5" ,groupname:"Mobile" , status:"false" , servicename:[{name:"qwe" , id:1} , {name:"asd" , id:2} , {name:"zxc" , id:3} , {name:"vbn" , id:4} , {name:"fhg" , id:5}]},
-  { index:"6" ,groupname:"Mobile" , status:"true" , servicename:[{name:"qwe" , id:1} , {name:"asd" , id:2} , {name:"zxc" , id:3} , {name:"vbn" , id:4} , {name:"fhg" , id:5}]},
-  { index:"7" ,groupname:"Mobile" , status:"false" , servicename:[{name:"qwe" , id:1} , {name:"asd" , id:2} , {name:"zxc" , id:3} , {name:"vbn" , id:4} , {name:"fhg" , id:5}]},
+  { index:"1" ,servicename:"Mobile" ,  ip:'123456789' ,  status:"Active" , port:123 , username:"jumayev" , groupname:"ozodbek"},
+  { index:"2" ,servicename:"Mobile" ,  ip:'123456789' ,  status:"Active" , port:123 , username:"jumayev" , groupname:"ozodbek"},
+  { index:"3" ,servicename:"Mobile" ,  ip:'123456789' ,  status:"Active" , port:123 , username:"jumayev" , groupname:"ozodbek"},
+  { index:"4" ,servicename:"Mobile" ,  ip:'123456789' ,  status:"Active" , port:123 , username:"jumayev" , groupname:"ozodbek"},
+  { index:"5" ,servicename:"Mobile" ,  ip:'123456789' ,  status:"Active" , port:123 , username:"jumayev" , groupname:"ozodbek"},
+  { index:"6" ,servicename:"Mobile" ,  ip:'123456789' ,  status:"Active" , port:123 , username:"jumayev" , groupname:"ozodbek"},
+  { index:"7" ,servicename:"Mobile" ,  ip:'123456789' ,  status:"Active" , port:123 , username:"jumayev" , groupname:"ozodbek"},
 ]
 
-const usersMap = [
-  { value: 'mbms', label: 'mbms' },
-  { value: 'nets', label: 'nets' },
-  { value: 'rack', label: 'rack' },
-];
+const Groups = [];
 
 
-const JoinGroup = () => {
+const AddService = () => {
   const [sort, setSort] = useState(1);
   const [list, setList] = useState(50);
   const [DubleList, setDubleList] = useState(10);
   const [Display, setDisplay] = useState(false);
 
-  const [Groupname, setGropname] = useState('');
-  const [FirstName, setFirstName] = useState('');
-  const [LastName, setLastName] = useState('');
+  const [servicname , setServicename] = useState('');
+  const [UserName, setUserName] = useState('');
   const [Status, setStatus] = useState(true);
-  const [Id, setId] = useState(null); 
-
+  const [group, setGroups] = useState('');
+  const [ip, setIp] = useState('');
+  const [port, setPort] = useState('');
+  const [Id, setId] = useState(null);
+  
   const [text, setText] = useState('');
   const [showSuccess , setShowSuccess] = useState(false);
   const [success , setSuccess] = useState(false);
@@ -68,20 +64,38 @@ const JoinGroup = () => {
     }
   };
 
+  const formFiltre = () => {
+    setServicename('');
+    setGroups('');
+    setStatus('');
+    setDisplay(!Display);
+  }
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+  }
+
+  const handleFormSubmites = () => {
+    setSort(1);
+    sayt();
+  }
+
+  const handleFormClear = () => {
+    window.location.reload();
+  }
+
+
   const sayt = () => {
-    const groupname = Groupname;
-    const firstName = FirstName;
-    const lastName = LastName;
+    const username = UserName;
     const page = sort - 1;
     const size = DubleList;
 
     const data = {
-      groupname,
-      firstName,
-      lastName,
+      username,
       page,
       size,
     };
+
 
     fetch("http://localhost:8081/user/list", {
       method: "POST",
@@ -99,6 +113,18 @@ const JoinGroup = () => {
       .catch((error) => {
         console.error("Xatolik yuz berdi:", error);
       });
+
+      TableBackUser(TableBeck)
+
+      TableBeck.forEach((element, index) => {
+        const newGroup = { value: element.groupname + index, label: element.groupname + index };
+      
+        // Massivda bunday qiymat mavjud emasligini tekshiramiz
+        if (!Groups.some(existingGroup => existingGroup.value === newGroup.value)) {
+          Groups.push(newGroup);
+        }
+      });
+
   };
 
   const getAccessToken = () => {
@@ -109,30 +135,33 @@ const JoinGroup = () => {
     let Tbody = document.querySelector('.Table-tbody');
     Tbody.innerHTML = '';
 
-
     data.forEach((element) => {
+
       let tr = document.createElement('tr');
 
       let tdId = document.createElement('td');
       tdId.innerHTML = element.index;
       tr.appendChild(tdId);
 
+      let tdServicename = document.createElement('td');
+      tdServicename.innerHTML = element.servicename;
+      tr.appendChild(tdServicename);
+
+
+      const tdp = document.createElement('td');
+      tdp.innerHTML = element.ip;
+      tr.appendChild(tdp);
+
+      let tdPort = document.createElement('td');
+      tdPort.innerHTML = element.port;
+      tr.appendChild(tdPort);
+
       let tdUsername = document.createElement('td');
-      tdUsername.innerHTML = element.groupname;
+      tdUsername.innerHTML = element.username;
       tr.appendChild(tdUsername);
 
       let tdGroupname = document.createElement('td');
-      let tdGroupnameUl = document.createElement('ul');
-      let tdGroupnameLi = document.createElement('li');
-      tdGroupname.className = "tbody-th-select";
-      tdGroupnameUl.className = "tbody-ul";
-      tdGroupnameLi.className = "tbody-ul-li";
-      element.servicename.forEach((el) => {
-        const tdGroupnameLi = document.createElement('li');
-        tdGroupnameLi.innerHTML = el.name;
-        tdGroupnameUl.appendChild(tdGroupnameLi);
-      });
-      tdGroupname.appendChild(tdGroupnameUl);
+      tdGroupname.innerHTML = element.groupname;
       tr.appendChild(tdGroupname);
 
       let tdStatus = document.createElement('td');
@@ -140,7 +169,7 @@ const JoinGroup = () => {
       tr.appendChild(tdStatus);
 
       let tdBtn = document.createElement('td');
-      tdBtn.className = "readUserSrcBody";
+      tdBtn.classList = "readUserSrcBody";
       let Updates = document.createElement('button');
       let Deletes = document.createElement('button');
       let imgUpdate = document.createElement('img');
@@ -157,8 +186,14 @@ const JoinGroup = () => {
       Deletes.appendChild(imgDelete);
 
       Updates.addEventListener('click' , () => {
-        setGropname(element.groupname);
+        
+        setServicename(element.servicename);
+        setUserName(element.username);
+        setIp(element.ip);
+        setPort(element.port);
+        setGroups(element.groupname);
         setStatus(element.status)
+
         document.getElementById('modalDelete').style.display = "flex";
         document.getElementById('formModalBtn').style.display = "flex";
         document.getElementById('modal-delete-body').style.display = "flex";
@@ -183,7 +218,6 @@ const JoinGroup = () => {
 
       Tbody.appendChild(tr);
     });
-
   };
 
   useEffect( () => {
@@ -191,7 +225,6 @@ const JoinGroup = () => {
       window.location.pathname = "/home"
     }else{
       sayt()
-      TableBackUser(TableBeck);
     }
   },[sort],[DubleList])
 
@@ -199,6 +232,20 @@ const JoinGroup = () => {
   const SortBtnList = (e) => {
     setDubleList(e.target.value);
     setSort(1)
+  };
+  
+
+  const status = [
+    { value: true, label: 'Active' },
+    { value: false, label: 'No active' },
+  ];
+
+  const handleChangeGroup = (group) => {
+    setGroups(group)
+  };
+
+  const handleChangeStatus = (status) => {
+    setStatus(status)
   };
 
   const OffUpdateModal = () => {
@@ -218,15 +265,11 @@ const JoinGroup = () => {
       // window.location.reload();
     }, 3000);
 
-    const firstName = FirstName;
-    const lastName = LastName;
-    const groupname = Groupname;
+    const username = UserName;
     const status = Status.value;
 
     const data = {
-      firstName,
-      lastName,
-      groupname,
+      username,
       status,
     };
 
@@ -299,85 +342,54 @@ const JoinGroup = () => {
     }
   }
 
-  const formFiltre = () => {
-    setGropname('');
-    setFirstName('');
-    setLastName('');
-    setDisplay(!Display);
-  }
-
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-  }
-
-  const handleFormSubmites = () => {
-    setSort(1);
-    sayt();
-  }
-
-  const handleFormClear = () => {
-    window.location.reload();
-  }
-
-  const handleStatusChangeUsers = (users) => {
-    setSuccess(users)
-  };  
-
-  const handleChangeStatus = (status) => {
-    setStatus(status)
-  };
-
-  const status = [
-    { value: true, label: 'Active' },
-    { value: false, label: 'No active' },
-  ];
-
-  const allValues = usersMap.map(user => user.value);
-
   return (
-
   <div className="join-group">
 
     <div className="join-group-header">
 
       <div className="join-group-header-body">
           <div className="join-group-header-title">
-            Group
+            Service
           </div>
 
           <div className="group-main-items">
 
-             <button className="group-main-item-list3" onClick={formFiltre}>Filter</button>
+              <button className="group-main-item-list3" onClick={formFiltre}>Filter</button>
 
-              <Link to="/home/group/addgroup" className="join-group-header-btn" title="Transfer">  Add Groups </Link>
+              <Link to="/home/service/addservice" className="join-group-header-btn" title="Transfer">  Add Service </Link>
 
           </div>
-
       </div>
 
       <form action="" className="join-group-header-body-form" style={{ display: Display ? "flex" : "none" }} onClick={handleFormSubmit}>
 
-        <div className="input-body">
-          <label htmlFor="" className="group-label">Group name: </label>
-          <input type="text" name="groupname" value={Groupname} className="group-input" onChange={(e) => setGropname(e.target.value)} />
-        </div>
+          <div className="input-body">
+            <label htmlFor="" className="group-label">Service name: </label>
+            <input type="text" name="name" value={servicname} className="group-input" onChange={(e) => setServicename(e.target.value)} />
+          </div>
 
-        <div className="input-body">
+          <div className="input-body">
+            <label htmlFor="" className="group-label">Group name:</label>
+            <Select value={group} onChange={(e) => handleChangeGroup(e)} options={Groups} className='user-select-modal' />
+          </div>
+
+          <div className="input-body">
             <label htmlFor="" className="group-label">Status: </label>
             <Select value={Status} onChange={handleChangeStatus} options={status} className='user-select-modal' />
           </div>
 
-        <div className="input-body-items">
+          <div className="input-body-items">
 
-          <button type="submit" style={{border:"none"}} onClick={handleFormSubmites}>
-            <img src={FilterImg} alt="Submit" className="group-btn" />
-          </button>
+            <button type="submit" style={{border:"none"}} onClick={handleFormSubmites}>
+              <img src={FilterImg} alt="Submit" className="group-btn" />
+            </button>
 
-          <button type="submit" style={{border:"none"}} onClick={handleFormClear}>
-            <img src={FilterClose} alt="Submit" className="group-close" />
-          </button>
+            <button type="submit" style={{border:"none"}} onClick={handleFormClear}>
+              <img src={FilterClose} alt="Submit" className="group-close" />
+            </button>
 
-        </div>
+          </div>
+
 
       </form>
 
@@ -417,9 +429,12 @@ const JoinGroup = () => {
         <thead>
           <tr>
             <th>Id</th>
-            <th>Group name</th>
             <th>Service name</th>
-            <th>status</th>
+            <th>Ip</th>
+            <th>Port</th>
+            <th>Username</th>
+            <th>Groupname</th>
+            <th>Status</th>
             <th className="join-group-table-center">
             </th>
           </tr>
@@ -431,13 +446,12 @@ const JoinGroup = () => {
       </table>
 
       <div className="modalDelete" id="modalDelete"></div>
-
       <div className="modal-delete-body" id="modal-delete-body">
 
           <div className="formModalDelete" id="formModalDelete">
 
             <div className="formModalDelete-forms">
-                <div className="formModalDelete-title">Do you want to delete ?</div>
+                <div className="formModalDelete-title">Do want to delete ?</div>
 
                 <div className="formModalDelete-btn-body">
                   <button className="formModalDelete-btn-body-btn green" onClick={OffUpdateModal}>Cancel</button>
@@ -450,24 +464,39 @@ const JoinGroup = () => {
 
           <form action="" className="formModalBtn" onClick={(e) => modalFormClick(e)} id="formModalBtn">
 
-            <h1>Update Group </h1>
+            <h1>Update Service </h1>
 
+            <div className="formModalBtn-inputs">
+              <label htmlFor="" className="formModalBtn-inputs-label">Service name : </label>
+              <input type="text" name="" id="" className="formModalBtn-inputs-item" value={servicname} onChange={(e) => setServicename(e.target.value)}/>
+            </div>
+
+            <div className="formModalBtn-inputs">
+              <label htmlFor="" className="formModalBtn-inputs-label">Ip : </label>
+              <input type="text" name="" id="" className="formModalBtn-inputs-item" value={ip} onChange={(e) => setIp(e.target.value)}/>
+            </div>
+
+            <div className="formModalBtn-inputs">
+              <label htmlFor="" className="formModalBtn-inputs-label">Port : </label>
+              <input type="number" name="" id="" className="formModalBtn-inputs-item" value={port} onChange={(e) => setPort(e.target.value)}/>
+            </div>
+
+            
+            <div className="formModalBtn-inputs">
+              <label htmlFor="" className="formModalBtn-inputs-label">Username : </label>
+              <input type="text" name="" id="" className="formModalBtn-inputs-item" value={UserName} onChange={(e) => setUserName(e.target.value)}/>
+            </div>
+
+            
             <div className="formModalBtn-inputs">
               <label htmlFor="" className="formModalBtn-inputs-label">Group name : </label>
-              <input type="text" name="" id="" className="formModalBtn-inputs-item" value={Groupname} onChange={(e) => setGropname(e.target.value)}/>
+              <input type="text" name="" id="" className="formModalBtn-inputs-item" value={group} onChange={(e) => setGroups(e.target.value)}/>
             </div>
 
             <div className="formModalBtn-inputs">
-              <label htmlFor="" className="formModalBtn-inputs-label">Services : </label>
-              {console.log(allValues)}
-              <Select className="group-input-select" closeMenuOnSelect={true} components={animatedComponents} value={usersMap.value} defaultValue={usersMap[0]} isMulti options={usersMap} onChange={(e) => handleStatusChangeUsers(e)}/>
+              <label htmlFor="" className="formModalBtn-inputs-label">Status : </label>
+              <Select value={Status} onChange={(e) => handleChangeStatus(e)} options={status} className='user-select-modal' required/>
             </div>
-
-            <div className="formModalBtn-inputs">
-              <label htmlFor="" className="formModalBtn-inputs-label">Status: </label>
-              <Select value={Status} defaultValue={status[0]} onChange={handleChangeStatus} options={status} className='user-select-modal' />
-            </div>
-            
             
             <div className="formModalBtn-inputs-btn">
               <button className="formModalBtn-inputs-btn-item-red" onClick={OffUpdateModal}>Cancel</button>
@@ -486,4 +515,4 @@ const JoinGroup = () => {
   );
 };
 
-export default JoinGroup;
+export default AddService;

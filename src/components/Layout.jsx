@@ -159,11 +159,11 @@ class Layout extends Component {
                   
               </Link>
 
-              <Link to="/home/host" className="link" title="Host" style={{display: localStorage.Role === "ROLE_ADMIN" ? "flex" : "none"}}>
+              <Link to="/home/service" className="link" title="Host" style={{display: localStorage.Role === "ROLE_ADMIN" ? "flex" : "none"}}>
                   <img src={Service} alt="" style={{width:"25px" , height:"25px" , filter: "brightness(0) invert(1)"}}/>
 
                   <div className="linkText">
-                    Host
+                    Service
                   </div>
                   
               </Link>
@@ -206,6 +206,7 @@ class Layout extends Component {
                   </div>
 
                 </div>
+                
 
                 <div className="language">
 

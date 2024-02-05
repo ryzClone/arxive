@@ -54,17 +54,24 @@
     gap: 30px;
     margin-left: 20px;
 }
+.group-label{
+    width: 140px;
+}
 .input-body{
+    width: 300px;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 10px;
 }
 .group-input{
-    padding: 8px 0px 8px 2px;
-    width: 200px;
+    padding: 11px 0px 10px 2px;
+    min-width: 197.3px;
     border-radius: 3px;
     border: 1px solid hsl(0, 0%, 80%);
+}
+.group-input:focus{
+    background-color: #fff;
 }
 .group-input-select{
     padding: 5px 0px 5px 2px;

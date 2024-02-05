@@ -11,9 +11,9 @@ import NoPage from './components/Nopage';
 import JoinGroup from './components/JoinGroup';
 import ReadUser from './components/readUser';
 import AddUserJoin from './components/Addjoingroup';
-import Host from './components/Host';
 import AddGroup from './components/AddGroup';
-import AddHost from './components/AddHost';
+import Service from './components/Service';
+import AddService from './components/AddService';
 
 export default function App() {
   return (
@@ -27,8 +27,8 @@ export default function App() {
       <Route path="/home/transfer" element={<Transfer />} />
       <Route path="/home/group" element={<Group />} />
       <Route path="/home/group/addgroup" element={<AddGroup />} />
-      <Route path="/home/host" element={<Host />} />
-      <Route path="/home/host/addhost" element={<AddHost />} />
+      <Route path="/home/service" element={<Service />} />
+      <Route path="/home/service/addservice" element={<AddService />} />
       <Route path="/home/joingroup" element={<JoinGroup />} />
       <Route path="/home/joingroup/adduserjoin" element={<AddUserJoin />} />
       <Route path="/home/*" element={<NoPage />} />

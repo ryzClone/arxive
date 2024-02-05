@@ -58,14 +58,18 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
+  padding: 10px 0px;
 }
+
 .join-group-section table .tbody-ul li{
   list-style: none;
   padding: 0px 5px;
   color: #000;
   border-radius: 2px;
   border: 1px solid rgb(160, 157, 157);
+  cursor: pointer;
 }
+
 .join-group-table-tbody-btn .blue{
   margin-right: 5px;
   border: none;
@@ -157,6 +161,7 @@
     width: 100%;
     display: flex;
     justify-content: center;
+    padding: 5px 0px 5px 0px;
     gap: 10px;
     border: none;
   }
@@ -176,6 +181,7 @@
     justify-content: space-between;
   }
   .join-group-header-body-form{
+    width: 100%;
     display: flex;
     gap: 20px;
     align-items: center;
@@ -223,7 +229,7 @@
     align-items: center;
   }
   .formModalBtn-inputs-label{
-    min-width: 25%;
+    min-width: 32%;
     font-size: 20px;
     font-weight: 700;
   }
