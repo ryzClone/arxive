@@ -5,7 +5,6 @@ import Transfer from './components/Transfer';
 import Adduser from './components/Adduser';
 import './style/app.css';
 import LoginPage from './components/loginpage';
-import ZipFiles from './components/ZipFiles';
 import Group from './components/Group';
 import NoPage from './components/Nopage';
 import JoinGroup from './components/JoinGroup';
@@ -14,6 +13,10 @@ import AddUserJoin from './components/Addjoingroup';
 import AddGroup from './components/AddGroup';
 import Service from './components/Service';
 import AddService from './components/AddService';
+import History from './components/history';
+import SubFolder from './Folders/SubFolder';
+import Logs from './Folders/Logs';
+import Folders from './Folders/Folder';
 
 export default function App() {
   return (
@@ -21,8 +24,10 @@ export default function App() {
 <Routes>
     <Route path="/" element={<LoginPage />} />
     <Route path="/home" element={<Layout />}>
-      <Route index element={<ZipFiles />} />  
+      <Route index element={<Folders />} />  
       <Route path="/home/readuser/" element={<ReadUser />} />
+      <Route path="/home/subfolder" element={<SubFolder />} />
+      <Route path="/home/logs" element={<Logs />} />
       <Route path="/home/readuser/adduser" element={<Adduser />} />
       <Route path="/home/transfer" element={<Transfer />} />
       <Route path="/home/group" element={<Group />} />
@@ -31,6 +36,8 @@ export default function App() {
       <Route path="/home/service/addservice" element={<AddService />} />
       <Route path="/home/joingroup" element={<JoinGroup />} />
       <Route path="/home/joingroup/adduserjoin" element={<AddUserJoin />} />
+      <Route path="/home/history" element={<History />} />
+
       <Route path="/home/*" element={<NoPage />} />
     </Route>
 </Routes>

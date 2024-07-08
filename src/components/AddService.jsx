@@ -2,18 +2,8 @@ import React, { Component } from 'react';
 import "../style/Adduser.css";
 import Select from 'react-select';
 import Success from './SucsesFull';
+import {BASE_URL} from "./base_url.jsx"
 
-const TableBeck = [
-  { servicename:"Mobile"},
-  { servicename:"Mobile"},
-  { servicename:"Mobile"},
-  { servicename:"Mobile"},
-  { servicename:"Mobile"},
-  { servicename:"Mobile"},
-  { servicename:"Mobile"},
-]
-
-const GroupName =[];
 
 const status = [
   { value: true, label: 'Active' },
@@ -28,8 +18,11 @@ class AddServce extends Component {
         ip: '',
         port: '',
         username: '',
-        groupname:"",
-        status:"",
+        groupname:'',
+        status:'',
+        password:'',
+        priority:'',
+        pathFolder:'',
 
         showSuccess: false,
         Success: '',
@@ -47,26 +40,32 @@ class AddServce extends Component {
       this.setState({
         showSuccess: false,
       });
+
+      window.location.reload();
+
     }, 3000);
 
     const serviceName = this.state.serviceName;
-    const Ip = this.state.ip;
-    const Port = this.state.port;
-    const userName = this.state.username;
-    const groupName = this.state.groupname.name;
-    const status = this.state.status.value;
+    const ip = this.state.ip;
+    const port = this.state.port;
+    const pathFolder = this.state.pathFolder;
+    const username = this.state.username;
+    const password = this.state.password;
+    const priority = this.state.priority;
+    const status = this.state.status === "" ? true : this.state.status.value;
 
     const data = {
       serviceName,
-      Ip,
-      Port,
-      userName,
-      groupName,
+      ip,
+      port,
+      pathFolder,
+      username,
+      password,
+      priority,
       status,
     };
-
-
-    fetch("http://localhost:8081/auth/register", {
+    
+    fetch(`${BASE_URL}/service/add`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${this.getAccessToken()}`,
@@ -92,9 +91,11 @@ class AddServce extends Component {
         serviceName: '',
         ip: '',
         port: '',
+        pathFolder:'',
         username: '',
-        groupName:"",
-        status:"Active",
+        password:'',
+        priority: '',
+        status:"",
         showSuccess: '',
         Success: '',
       });
@@ -120,16 +121,10 @@ class AddServce extends Component {
     return null;
   }
 
-  handleChange = (groupname) => {
-    this.setState({ groupname }, () =>
-      this.state.groupname
-    );
-  };
-
   handleStatus = (status) => {
 
     this.setState({ status }, () =>
-      this.state.status
+      this.state.status.value
     );
 
   }
@@ -138,16 +133,48 @@ class AddServce extends Component {
     if(localStorage.getItem('Role') === "ROLE_USER"){
       window.location.pathname = "/homes"
     }
+  }
 
-    TableBeck.forEach((element , index) => {
+  TestConnection = () => {
 
-      const newGroup = { value: element.servicename + index, label: element.servicename + index };
-      
-      if (!GroupName.some(existingGroup => existingGroup.value === newGroup.value)) {
-        GroupName.push(newGroup);
-      }
-      
+    const serviceName = this.state.serviceName;
+    const ip = this.state.ip;
+    const port = this.state.port;
+    const pathFolder = this.state.pathFolder;
+    const username = this.state.username;
+    const password = this.state.password;
+
+    const data = {
+      serviceName,
+      ip,
+      port,
+      pathFolder,
+      username,
+      password,
+    }
+
+    fetch(`${BASE_URL}/service/test`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${this.getAccessToken()}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
     })
+      .then((response) => response.json())
+      .then((data) => {
+
+        this.setState({
+          text: data.message,
+          showSuccess:true,
+          color:data.success,
+        })
+      
+      })
+      .catch((error) => {
+        console.error("Xatolik yuz berdi:", error);
+      });
+
   }
 
   render() {
@@ -190,6 +217,16 @@ class AddServce extends Component {
 
           <input
             type='text'
+            name='pathFolder'
+            value={this.state.pathFolder}
+            onChange={this.handleInputChange}
+            className='user-input'
+            placeholder='Path Folder'
+            required
+          />  
+
+          <input
+            type='text'
             name='username'
             value={this.state.username}
             onChange={this.handleInputChange}
@@ -198,7 +235,29 @@ class AddServce extends Component {
             required
           />
 
-          <Select value={this.state.groupname} onChange={this.handleChange} options={GroupName} className='user-select-modal' />
+          <div className='PriorityBack'>
+                    <input
+                      type='password'
+                      name='password'
+                      value={this.state.password}
+                      onChange={this.handleInputChange}
+                      className='user-input'
+                      placeholder='Password'
+                      required
+                    />
+                    <div className='PriorityBack-btn' onClick={this.TestConnection}>Test connection</div>
+
+          </div>
+
+          <input
+            type='number'
+            name='priority'
+            value={this.state.priority}
+            onChange={this.handleInputChange}
+            className='user-input'
+            placeholder='Priority'
+          />
+
 
           <Select value={this.state.status} onChange={this.handleStatus} options={status} className='user-select-modal' />
 

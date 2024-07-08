@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import "../style/Adduser.css";
 import Select from 'react-select';
 import Success from './SucsesFull';
+import {BASE_URL} from "./base_url.jsx"
+
 
 
 const role = [
@@ -41,14 +43,15 @@ class AddUser extends Component {
       this.setState({
         showSuccess: false,
       });
+      window.location.reload();
     }, 3000);
-
+    
     const firstName = this.state.firstName;
     const lastName = this.state.lastName;
     const username = this.state.userName;
     const password = this.state.password;
-    const role = this.state.role.value;
-    const status = this.state.status.value;
+    const role = this.state.role === '' ? "ROLE_USER" : this.state.role.value;
+    const status = this.state.status === '' ? true : this.state.status.value;
 
     const data = {
       firstName,
@@ -59,8 +62,7 @@ class AddUser extends Component {
       status,
     };
 
-
-    fetch("http://localhost:8081/auth/register", {
+    fetch(`${BASE_URL}/auth/register`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${this.getAccessToken()}`,
@@ -70,6 +72,7 @@ class AddUser extends Component {
     })
       .then((response) => response.json())
       .then((data) => {
+        
         this.setState({
           text: data.message,
           showSuccess:true,

@@ -18,11 +18,14 @@
 .add-service-input{
     width: 100%;
 }
-.group-input-select{
+.group-input-selects{
     width: 100%
 }
 .add-service-status{
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 .add-service-btn{
     width: 50%;

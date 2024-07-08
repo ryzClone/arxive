@@ -7,37 +7,27 @@ import Update from "../png/section/aside/update.png";
 import Delete from "../png/section/aside/delete.png";
 import Select from 'react-select';
 import Success from "./SucsesFull";
-
-const TableBeck = [
-  { index:"1" ,servicename:"Mobile" ,  ip:'123456789' ,  status:"Active" , port:123 , username:"jumayev" , groupname:"ozodbek"},
-  { index:"2" ,servicename:"Mobile" ,  ip:'123456789' ,  status:"Active" , port:123 , username:"jumayev" , groupname:"ozodbek"},
-  { index:"3" ,servicename:"Mobile" ,  ip:'123456789' ,  status:"Active" , port:123 , username:"jumayev" , groupname:"ozodbek"},
-  { index:"4" ,servicename:"Mobile" ,  ip:'123456789' ,  status:"Active" , port:123 , username:"jumayev" , groupname:"ozodbek"},
-  { index:"5" ,servicename:"Mobile" ,  ip:'123456789' ,  status:"Active" , port:123 , username:"jumayev" , groupname:"ozodbek"},
-  { index:"6" ,servicename:"Mobile" ,  ip:'123456789' ,  status:"Active" , port:123 , username:"jumayev" , groupname:"ozodbek"},
-  { index:"7" ,servicename:"Mobile" ,  ip:'123456789' ,  status:"Active" , port:123 , username:"jumayev" , groupname:"ozodbek"},
-]
-
-const Groups = [];
-
+import {BASE_URL} from "./base_url.jsx"
 
 const AddService = () => {
   const [sort, setSort] = useState(1);
   const [list, setList] = useState(50);
-  const [DubleList, setDubleList] = useState(10);
+  const [DubleList, setDubleList] = useState(15);
   const [Display, setDisplay] = useState(false);
 
   const [servicname , setServicename] = useState('');
-  const [UserName, setUserName] = useState('');
   const [Status, setStatus] = useState(true);
-  const [group, setGroups] = useState('');
-  const [ip, setIp] = useState('');
-  const [port, setPort] = useState('');
-  const [Id, setId] = useState(null);
+  const [servicIp, setIp] = useState('');
+  const [servicePort, setPort] = useState('');
+  const [serverPriority, setserverPriority] = useState('');
+  const [ServiceId, setServiceId] = useState(null);
   
   const [text, setText] = useState('');
   const [showSuccess , setShowSuccess] = useState(false);
   const [success , setSuccess] = useState(false);
+
+  const [FilterName , setFilterName] = useState('');
+  const [FilterIp , setFilterIp] = useState('');
 
 
   const dubleSortMin = () => {
@@ -66,8 +56,8 @@ const AddService = () => {
 
   const formFiltre = () => {
     setServicename('');
-    setGroups('');
     setStatus('');
+    setIp('');
     setDisplay(!Display);
   }
 
@@ -81,23 +71,32 @@ const AddService = () => {
   }
 
   const handleFormClear = () => {
-    window.location.reload();
+    setServicename('');
+    setIp('');
+    setFilterName(servicname);
+    setFilterIp(servicIp);
   }
 
 
   const sayt = () => {
-    const username = UserName;
+    const name = servicname;
+    const username = '';
+    const ip = servicIp;
+    const user = ''
     const page = sort - 1;
     const size = DubleList;
 
     const data = {
+      name,
       username,
+      ip,
+      user,
       page,
       size,
     };
 
 
-    fetch("http://localhost:8081/user/list", {
+    fetch(`${BASE_URL}/service/list`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${getAccessToken()}`,
@@ -107,22 +106,11 @@ const AddService = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        setList(data.data.count)
+        setList(data.data.count);
         TableBackUser(data.data.list);
       })
       .catch((error) => {
         console.error("Xatolik yuz berdi:", error);
-      });
-
-      TableBackUser(TableBeck)
-
-      TableBeck.forEach((element, index) => {
-        const newGroup = { value: element.groupname + index, label: element.groupname + index };
-      
-        // Massivda bunday qiymat mavjud emasligini tekshiramiz
-        if (!Groups.some(existingGroup => existingGroup.value === newGroup.value)) {
-          Groups.push(newGroup);
-        }
       });
 
   };
@@ -136,7 +124,6 @@ const AddService = () => {
     Tbody.innerHTML = '';
 
     data.forEach((element) => {
-
       let tr = document.createElement('tr');
 
       let tdId = document.createElement('td');
@@ -144,7 +131,7 @@ const AddService = () => {
       tr.appendChild(tdId);
 
       let tdServicename = document.createElement('td');
-      tdServicename.innerHTML = element.servicename;
+      tdServicename.innerHTML = element.serviceName;
       tr.appendChild(tdServicename);
 
 
@@ -156,13 +143,9 @@ const AddService = () => {
       tdPort.innerHTML = element.port;
       tr.appendChild(tdPort);
 
-      let tdUsername = document.createElement('td');
-      tdUsername.innerHTML = element.username;
-      tr.appendChild(tdUsername);
-
-      let tdGroupname = document.createElement('td');
-      tdGroupname.innerHTML = element.groupname;
-      tr.appendChild(tdGroupname);
+      let tdPriority = document.createElement('td');
+      tdPriority.innerHTML = element.priority;
+      tr.appendChild(tdPriority);
 
       let tdStatus = document.createElement('td');
       tdStatus.innerHTML = element.status;
@@ -186,20 +169,19 @@ const AddService = () => {
       Deletes.appendChild(imgDelete);
 
       Updates.addEventListener('click' , () => {
-        
-        setServicename(element.servicename);
-        setUserName(element.username);
+        setServicename(element.serviceName);
         setIp(element.ip);
         setPort(element.port);
-        setGroups(element.groupname);
-        setStatus(element.status)
+        setStatus(element.status);
+        setServiceId(element.id);
+        setserverPriority(element.priority);
+
 
         document.getElementById('modalDelete').style.display = "flex";
         document.getElementById('formModalBtn').style.display = "flex";
         document.getElementById('modal-delete-body').style.display = "flex";
         document.querySelector('.join-group-header-body-form').style.display = "none";
         document.getElementById('formModalDelete').style.display = "none";
-        setId(element.id);
       })
 
       Deletes.addEventListener('click' , () => {
@@ -208,7 +190,7 @@ const AddService = () => {
         document.getElementById('modal-delete-body').style.display = "flex";
         document.querySelector('.join-group-header-body-form').style.display = "none";
         document.getElementById('formModalDelete').style.display = "flex";
-        setId(element.id);
+        setServiceId(element.id);
       })
 
 
@@ -226,7 +208,7 @@ const AddService = () => {
     }else{
       sayt()
     }
-  },[sort],[DubleList])
+  },[sort , DubleList , FilterName , FilterIp])
 
 
   const SortBtnList = (e) => {
@@ -240,15 +222,13 @@ const AddService = () => {
     { value: false, label: 'No active' },
   ];
 
-  const handleChangeGroup = (group) => {
-    setGroups(group)
-  };
-
   const handleChangeStatus = (status) => {
     setStatus(status)
   };
 
   const OffUpdateModal = () => {
+    setServicename('');
+    setIp('');
     document.getElementById('modalDelete').style.display = "none";
     document.getElementById('modal-delete-body').style.display = "none";
     document.getElementById('formModalBtn').style.display = "none";
@@ -262,20 +242,29 @@ const AddService = () => {
 
     setTimeout(() => {
       setShowSuccess(false);
-      // window.location.reload();
+        // window.location.reload();
     }, 3000);
 
-    const username = UserName;
-    const status = Status.value;
+    const serviceName = servicname;
+    const ip = servicIp;
+    const port = servicePort;
+    const username = null;
+    const password = null;
+    const priority = serverPriority === undefined ? null : serverPriority;
+    const status = Status === undefined ? true : Status;
 
     const data = {
+      serviceName,
+      ip,
+      port,
       username,
+      password,
+      priority,
       status,
     };
-
     
     
-    fetch(`http://localhost:8081/user/update/${Id}`, {
+    fetch(`${BASE_URL}/service/update/${ServiceId}`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${getAccessToken()}`,
@@ -308,9 +297,8 @@ const AddService = () => {
       window.location.reload();
     }, 3000);
 
-
-      fetch(`http://localhost:8081/user/delete/${Id}`, {
-      method: "PUT",
+      fetch(`${BASE_URL}/service/delete/${ServiceId}`, {
+      method: "DELETE",
       headers: {
         Authorization: `Bearer ${getAccessToken()}`,
         "Content-Type": "application/json",
@@ -369,13 +357,8 @@ const AddService = () => {
           </div>
 
           <div className="input-body">
-            <label htmlFor="" className="group-label">Group name:</label>
-            <Select value={group} onChange={(e) => handleChangeGroup(e)} options={Groups} className='user-select-modal' />
-          </div>
-
-          <div className="input-body">
-            <label htmlFor="" className="group-label">Status: </label>
-            <Select value={Status} onChange={handleChangeStatus} options={status} className='user-select-modal' />
+            <label htmlFor="" className="group-label">Ip host:</label>
+            <input type="text" name="name" value={servicIp} className="group-input" onChange={(e) => setIp(e.target.value)} />
           </div>
 
           <div className="input-body-items">
@@ -411,7 +394,7 @@ const AddService = () => {
 
               <div className="sortBtnList">
                   <select id="cars" onChange={SortBtnList}>
-                      <option value={10} className="sortBtnList">10</option>
+                      <option value={15} className="sortBtnList">15</option>
                       <option value={25} className="sortBtnList">25</option>
                       <option value={50} className="sortBtnList">50</option>
                   </select>
@@ -432,8 +415,7 @@ const AddService = () => {
             <th>Service name</th>
             <th>Ip</th>
             <th>Port</th>
-            <th>Username</th>
-            <th>Groupname</th>
+            <th>Priority</th>
             <th>Status</th>
             <th className="join-group-table-center">
             </th>
@@ -473,24 +455,18 @@ const AddService = () => {
 
             <div className="formModalBtn-inputs">
               <label htmlFor="" className="formModalBtn-inputs-label">Ip : </label>
-              <input type="text" name="" id="" className="formModalBtn-inputs-item" value={ip} onChange={(e) => setIp(e.target.value)}/>
+              <input type="text" name="" id="" className="formModalBtn-inputs-item" value={servicIp} onChange={(e) => setIp(e.target.value)}/>
             </div>
 
             <div className="formModalBtn-inputs">
               <label htmlFor="" className="formModalBtn-inputs-label">Port : </label>
-              <input type="number" name="" id="" className="formModalBtn-inputs-item" value={port} onChange={(e) => setPort(e.target.value)}/>
+              <input type="number" name="" id="" className="formModalBtn-inputs-item" value={servicePort} onChange={(e) => setPort(e.target.value)}/>
             </div>
 
             
             <div className="formModalBtn-inputs">
-              <label htmlFor="" className="formModalBtn-inputs-label">Username : </label>
-              <input type="text" name="" id="" className="formModalBtn-inputs-item" value={UserName} onChange={(e) => setUserName(e.target.value)}/>
-            </div>
-
-            
-            <div className="formModalBtn-inputs">
-              <label htmlFor="" className="formModalBtn-inputs-label">Group name : </label>
-              <input type="text" name="" id="" className="formModalBtn-inputs-item" value={group} onChange={(e) => setGroups(e.target.value)}/>
+              <label htmlFor="" className="formModalBtn-inputs-label">Priority : </label>
+              <input type="number" name="" id="" className="formModalBtn-inputs-item" value={serverPriority} onChange={(e) => setPort(e.target.value)}/>
             </div>
 
             <div className="formModalBtn-inputs">

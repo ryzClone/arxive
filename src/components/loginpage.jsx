@@ -4,6 +4,9 @@ import "../style/loginpage.css";
 import myImg from "../img/login/background.jpg";
 import EyeInvis from "../png/login-page/eyeivis.png";
 import Eye from "../png/login-page/eye.png";
+import Success from './SucsesFull';
+import {BASE_URL} from "./base_url.jsx"
+
 
 export default class LoginPage extends React.Component {
   constructor(props) {
@@ -11,8 +14,13 @@ export default class LoginPage extends React.Component {
     this.state = {
       login: "",
       password: "",
+      showSuccess: false,
+      Success: '',
+      text:"",
+      color: false,
     };
   }
+
   
   handleLoginChange = (e) => {
     this.setState({ login: e.target.value });
@@ -35,11 +43,6 @@ export default class LoginPage extends React.Component {
     }
   };
 
-  componentDidMount = () => {
-    if(localStorage.getItem('jwtToken')){
-      window.location.pathname = "/home"
-    }
-  }
 
   handleSubmit = (e) => {
     e.preventDefault();
@@ -49,36 +52,56 @@ export default class LoginPage extends React.Component {
     const data = {
       username,
       password,
-    }
+    } 
 
-    // fetch("http://localhost:8081/auth/login", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(data),
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     if (data.data.token) {
-    //       localStorage.setItem("jwtToken", data.data.token);
-    //       localStorage.setItem("UserName", data.data.username);
-    //       localStorage.setItem("Role", data.data.role);
-    //       window.location.pathname = "/home";
-    //     }else{
-    //       console.log(data.data.message);
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log('Username or Password wrong !!!');
-    //   });
-    window.location.pathname = "/";
-    localStorage.setItem("jwtToken", "Admin");
-    localStorage.setItem("UserName", 'Ozodbek');
-    localStorage.setItem("Role", "ROLE_ADMIN");
+    setTimeout(() => {
+      this.setState({
+        showSuccess: false,
+      });
+    }, 3000);
 
+    fetch(`${BASE_URL}/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.data.token) {
+          localStorage.setItem("jwtToken", data.data.token);
+          localStorage.setItem("UserName", data.data.username);
+          localStorage.setItem("Role", data.data.role);
+          window.location.pathname = "/home";
+        }else{
+          console.log(data.data.message);
+        }
+      })
+      .catch((error) => {
+        this.setState({
+          text: "Username or Password wrong !!!",
+          showSuccess:true,
+          color:data.success,
+        })
+      });
+
+      
+      this.setState({
+        showSuccess: '',
+        Success: '',
+      });
 
   };
+
+  renderSuccessMessage() {
+    if (this.state.showSuccess) {
+      return (
+        <Success title={this.state.text} background={this.state.color}/>
+      );
+    }
+    return null;
+  }
 
   render() {
     return (
@@ -119,7 +142,7 @@ export default class LoginPage extends React.Component {
           </form>
           <img src={myImg} alt="" className="Img" />
         </div>
-
+        {this.renderSuccessMessage()}
         <Outlet />
       </div>
     );

@@ -7,30 +7,30 @@ import Update from "../png/section/aside/update.png";
 import Delete from "../png/section/aside/delete.png";
 import Select from 'react-select';
 import Success from "./SucsesFull";
-
-const TableBeck = [
-  { index:"1" ,username:"Mobile" , status:"Active" , groupname:"mbms" , lastName:"jumayev" , firstName:"ozodbek"},
-  { index:"2" ,username:"Mobile" , status:"Active" , groupname:"mbms" , lastName:"jumayev" , firstName:"ozodbek"},
-  { index:"3" ,username:"Mobile" , status:"Active" , groupname:"mbms" , lastName:"jumayev" , firstName:"ozodbek"},
-  { index:"4" ,username:"Mobile" , status:"Active" , groupname:"mbms" , lastName:"jumayev" , firstName:"ozodbek"},
-  { index:"5" ,username:"Mobile" , status:"Active" , groupname:"mbms" , lastName:"jumayev" , firstName:"ozodbek"},
-  { index:"6" ,username:"Mobile" , status:"Active" , groupname:"mbms" , lastName:"jumayev" , firstName:"ozodbek"},
-]
+import {BASE_URL} from "./base_url.jsx"
 
 const ReadUser = () => {
   const [sort, setSort] = useState(1);
   const [list, setList] = useState(50);
-  const [DubleList, setDubleList] = useState(10);
+  const [DubleList, setDubleList] = useState(15);
   const [Display, setDisplay] = useState(false);
+
   const [UserName, setUserName] = useState('');
   const [FirstName, setFirstName] = useState('');
   const [LastName, setLastName] = useState('');
+  const [Password , setPassword] = useState('');
   const [Role, setRole] = useState('');
   const [Status, setStatus] = useState(true);
   const [Id, setId] = useState(null);
+
+
   const [text, setText] = useState('');
   const [showSuccess , setShowSuccess] = useState(false);
   const [success , setSuccess] = useState(false);
+
+  const [FilterName , setFilterName] = useState('');
+  const [FilterFirs , setFilterFirs] = useState('');
+  const [FilterLast , setFilterLast] = useState('');
 
   const dubleSortMin = () => {
     if (sort >= 3) {
@@ -73,7 +73,12 @@ const ReadUser = () => {
   }
 
   const handleFormClear = () => {
-    window.location.reload();
+    setFirstName('');
+    setLastName('');
+    setUserName('');
+    setFilterName(UserName);
+    setFilterLast(LastName);
+    setFilterFirs(FirstName);
   }
 
 
@@ -92,7 +97,7 @@ const ReadUser = () => {
       size,
     };
 
-    fetch("http://localhost:8081/user/list", {
+    fetch(`${BASE_URL}/user/list`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${getAccessToken()}`,
@@ -108,7 +113,6 @@ const ReadUser = () => {
       .catch((error) => {
         console.error("Xatolik yuz berdi:", error);
       });
-      TableBackUser(TableBeck)
   };
 
   const getAccessToken = () => {
@@ -120,7 +124,6 @@ const ReadUser = () => {
     Tbody.innerHTML = '';
 
     data.forEach((element) => {
-      console.log(element);
 
       let tr = document.createElement('tr');
 
@@ -203,13 +206,13 @@ const ReadUser = () => {
     });
   };
 
-  useEffect( () => {
+  useEffect(() => {
     if (localStorage.getItem('Role') === "ROLE_USER") {
-      window.location.pathname = "/home"
-    }else{
-      sayt()
+      window.location.pathname = "/home";
+    } else {
+      sayt();
     }
-  },[sort],[DubleList])
+  }, [sort, DubleList , FilterName , FilterFirs , FilterLast]);
 
 
   const SortBtnList = (e) => {
@@ -237,6 +240,10 @@ const ReadUser = () => {
   };
 
   const OffUpdateModal = () => {
+    setUserName('');
+    setFirstName('');
+    setLastName('');
+    setPassword('');
     document.getElementById('modalDelete').style.display = "none";
     document.getElementById('modal-delete-body').style.display = "none";
     document.getElementById('formModalBtn').style.display = "none";
@@ -250,26 +257,26 @@ const ReadUser = () => {
 
     setTimeout(() => {
       setShowSuccess(false);
-      // window.location.reload();
+        window.location.reload();
     }, 3000);
 
     const firstName = FirstName;
     const lastName = LastName;
     const username = UserName;
     const role = Role.value;
-    const status = Status.value;
+    const status = Status === undefined ? true : Status.value;
+    const password = Password;
 
     const data = {
       firstName,
       lastName,
       username,
+      password,
       role,
       status,
-    };
+    };    
 
-    
-    
-    fetch(`http://localhost:8081/user/update/${Id}`, {
+    fetch(`${BASE_URL}/user/update/${Id}`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${getAccessToken()}`,
@@ -287,7 +294,12 @@ const ReadUser = () => {
         console.error("Xatolik yuz berdi:", error);
       });
 
-
+      setUserName('');
+      setFirstName('');
+      setLastName('');
+      setRole('');
+      setStatus('');
+      setPassword('');
       document.getElementById('modalDelete').style.display = "none";
       document.getElementById('formModalBtn').style.display = "none";
       document.getElementById('modal-delete-body').style.display = "none";
@@ -303,7 +315,7 @@ const ReadUser = () => {
     }, 3000);
 
 
-      fetch(`http://localhost:8081/user/delete/${Id}`, {
+      fetch(`${BASE_URL}/user/delete/${Id}`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${getAccessToken()}`,
@@ -405,7 +417,7 @@ const ReadUser = () => {
 
               <div className="sortBtnList">
                   <select id="cars" onChange={SortBtnList}>
-                      <option value={10} className="sortBtnList">10</option>
+                      <option value={15} className="sortBtnList">15</option>
                       <option value={25} className="sortBtnList">25</option>
                       <option value={50} className="sortBtnList">50</option>
                   </select>
@@ -472,6 +484,11 @@ const ReadUser = () => {
             <div className="formModalBtn-inputs">
               <label htmlFor="" className="formModalBtn-inputs-label">Lastname : </label>
               <input type="text" name="" id="" className="formModalBtn-inputs-item" value={LastName} onChange={(e) => setLastName(e.target.value)}/>
+            </div>
+
+            <div className="formModalBtn-inputs">
+              <label htmlFor="" className="formModalBtn-inputs-label">Password : </label>
+              <input type="text" name="" id="" className="formModalBtn-inputs-item" value={Password} onChange={(e) => setPassword(e.target.value)}/>
             </div>
 
             <div className="formModalBtn-inputs">

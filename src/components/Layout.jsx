@@ -1,7 +1,8 @@
 import React, {Component } from "react";
 import { Outlet, Link } from "react-router-dom";
 import "../style/layout.css";
-import Logo from "../img/section/logo1.png";
+import Logo from "../img/section/logo1.ico";
+// import Logo from "../img/section/logo_trial (1).png";
 import Transfer from "../png/section/aside/transfer.png";
 import Home from "../png/section/aside/home.png";
 import AddUser from "../png/section/aside/addUser.png";
@@ -10,18 +11,15 @@ import Eng from "../png/section/aside/Eng.png";
 import Rus from "../png/section/aside/rus.png";
 import Uzb from "../png/section/aside/uzb.png";
 import Group from "../png/section/aside/group.png";
+import Joingroup from "../png/section/aside/joingroup.png";
 import Service from "../png/section/aside/service.png";
+import History from "../png/section/aside/history.png";
 
 class Layout extends Component {
   constructor(props) {
     super(props);
     this.state = {
       searchText: "",
-      zipFiles: [
-        "../zip/zip1.zip",
-        "../zip/zip2.zip",
-        "../zip/zip3.zip",
-      ],
       hamburger:"flex",
       isDisplayed: false,
       language:Eng,
@@ -74,7 +72,7 @@ class Layout extends Component {
   }
 
   componentDidMount(){
-    if(window.localStorage.length === 0){
+    if(!window.localStorage.getItem("jwtToken")){
       window.location.pathname = '/'
     }
   }
@@ -83,7 +81,6 @@ class Layout extends Component {
     localStorage.removeItem("jwtToken");
     localStorage.removeItem('UserName');
     localStorage.removeItem('Role');
-
   };
 
   
@@ -108,14 +105,15 @@ class Layout extends Component {
                   style={{
                     width: "100%",
                     height: "100%",
+                    padding:"5px",
                     backgroundSize: "cover",
                   }}
                 />
               </div>
 
               <div className="logo-item">
-                <div className="logo-item-title">Uztelecom</div>
-                <div className="logo-item-text">версии: 16.3.18</div>
+                <div className="logo-item-title">Swift Transfer</div>
+                <div className="logo-item-text">версии: 1.0.1</div>
               </div>
             </div>
 
@@ -159,7 +157,7 @@ class Layout extends Component {
                   
               </Link>
 
-              <Link to="/home/service" className="link" title="Host" style={{display: localStorage.Role === "ROLE_ADMIN" ? "flex" : "none"}}>
+              <Link to="/home/service" className="link" title="Service" style={{display: localStorage.Role === "ROLE_ADMIN" ? "flex" : "none"}}>
                   <img src={Service} alt="" style={{width:"25px" , height:"25px" , filter: "brightness(0) invert(1)"}}/>
 
                   <div className="linkText">
@@ -169,10 +167,19 @@ class Layout extends Component {
               </Link>
 
               <Link to="/home/joingroup" className="link" title="JoinGroup" style={{display: localStorage.Role === "ROLE_ADMIN" ? "flex" : "none"}}>
-                  <img src={Service} alt="" style={{width:"25px" , height:"25px" , filter: "brightness(0) invert(1)"}}/>
+                  <img src={Joingroup} alt="" style={{width:"25px" , height:"25px" , filter: "brightness(0) invert(1)"}}/>
 
                   <div className="linkText">
                     Join Group
+                  </div>
+                  
+              </Link>
+
+              <Link to="/home/history" className="link" title="History" style={{display: localStorage.Role === "ROLE_ADMIN" ? "flex" : "none"}}>
+                  <img src={History} alt="" style={{width:"25px" , height:"25px" , filter: "brightness(0) invert(1)"}}/>
+
+                  <div className="linkText">
+                    History
                   </div>
                   
               </Link>
@@ -198,7 +205,7 @@ class Layout extends Component {
                 <div className="localStorage">
 
                   <div className="localStorage-username">
-                    <p>Username: </p> {localStorage.getItem('UserName').toUpperCase()}
+                    <p>Username: </p> {localStorage.getItem('UserName')}
                   </div>
 
                   <div className="localStorage-username">

@@ -1,48 +1,30 @@
 import React, { useState, useEffect } from "react";
 import "../style/joingroup.css";
 import { Link } from "react-router-dom";
+import Select from 'react-select';
+import Success from "./SucsesFull";
 import FilterImg from "../png/section/aside/white-filter.png";
 import FilterClose from "../png/section/aside/whiteClose.png";
 import Update from "../png/section/aside/update.png";
 import Delete from "../png/section/aside/delete.png";
-import Select from 'react-select';
-import Success from "./SucsesFull";
-import makeAnimated from 'react-select/animated';
+import {BASE_URL} from "./base_url.jsx"
 
-const animatedComponents = makeAnimated();
-
-const TableBeck = [
-  { index:"1" ,groupname:"Mobile" , status:"true" , servicename:[{name:"qwe" , id:1} , {name:"asd" , id:2} , {name:"zxc" , id:3} , {name:"vbn" , id:4} , {name:"fhg" , id:5}]},
-  { index:"2" ,groupname:"ssd" , status:"false" , servicename:[{name:"qwe" , id:1} , {name:"asd" , id:2} , {name:"zxc" , id:3} , {name:"vbn" , id:4} , {name:"fhg" , id:5}]},
-  { index:"4" ,groupname:"bbn" , status:"true" , servicename:[{name:"qwe" , id:1} , {name:"asd" , id:2} , {name:"zxc" , id:3} , {name:"vbn" , id:4} , {name:"fhg" , id:5}]},
-  { index:"5" ,groupname:"Mobile" , status:"false" , servicename:[{name:"qwe" , id:1} , {name:"asd" , id:2} , {name:"zxc" , id:3} , {name:"vbn" , id:4} , {name:"fhg" , id:5}]},
-  { index:"6" ,groupname:"Mobile" , status:"true" , servicename:[{name:"qwe" , id:1} , {name:"asd" , id:2} , {name:"zxc" , id:3} , {name:"vbn" , id:4} , {name:"fhg" , id:5}]},
-  { index:"7" ,groupname:"Mobile" , status:"false" , servicename:[{name:"qwe" , id:1} , {name:"asd" , id:2} , {name:"zxc" , id:3} , {name:"vbn" , id:4} , {name:"fhg" , id:5}]},
-]
-
-const usersMap = [
-  { value: 'mbms', label: 'mbms' },
-  { value: 'nets', label: 'nets' },
-  { value: 'rack', label: 'rack' },
-];
-
-
-const JoinGroup = () => {
+const Group = () => {
   const [sort, setSort] = useState(1);
   const [list, setList] = useState(50);
-  const [DubleList, setDubleList] = useState(10);
+  const [DubleList, setDubleList] = useState(15);
   const [Display, setDisplay] = useState(false);
 
   const [Groupname, setGropname] = useState('');
-  const [FirstName, setFirstName] = useState('');
-  const [LastName, setLastName] = useState('');
-  const [Status, setStatus] = useState(true);
-  const [Id, setId] = useState(null); 
+  const [Id, setId] = useState(null);
 
   const [text, setText] = useState('');
-  const [showSuccess , setShowSuccess] = useState(false);
-  const [success , setSuccess] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [userMap, setUsermap] = useState([]);
+  const [selectedServiceList, setSelectedServiceList] = useState([]);
 
+  const [FilterName , setFilterName] = useState('');
 
   const dubleSortMin = () => {
     if (sort >= 3) {
@@ -69,21 +51,17 @@ const JoinGroup = () => {
   };
 
   const sayt = () => {
-    const groupname = Groupname;
-    const firstName = FirstName;
-    const lastName = LastName;
+    const name = Groupname;
     const page = sort - 1;
     const size = DubleList;
 
     const data = {
-      groupname,
-      firstName,
-      lastName,
+      name,
       page,
       size,
     };
 
-    fetch("http://localhost:8081/user/list", {
+    fetch(`${BASE_URL}/group/list`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${getAccessToken()}`,
@@ -109,7 +87,6 @@ const JoinGroup = () => {
     let Tbody = document.querySelector('.Table-tbody');
     Tbody.innerHTML = '';
 
-
     data.forEach((element) => {
       let tr = document.createElement('tr');
 
@@ -118,20 +95,22 @@ const JoinGroup = () => {
       tr.appendChild(tdId);
 
       let tdUsername = document.createElement('td');
-      tdUsername.innerHTML = element.groupname;
+      tdUsername.innerHTML = element.name;
       tr.appendChild(tdUsername);
 
       let tdGroupname = document.createElement('td');
       let tdGroupnameUl = document.createElement('ul');
-      let tdGroupnameLi = document.createElement('li');
       tdGroupname.className = "tbody-th-select";
       tdGroupnameUl.className = "tbody-ul";
-      tdGroupnameLi.className = "tbody-ul-li";
-      element.servicename.forEach((el) => {
-        const tdGroupnameLi = document.createElement('li');
-        tdGroupnameLi.innerHTML = el.name;
-        tdGroupnameUl.appendChild(tdGroupnameLi);
-      });
+
+      if (element.serviceList.length >= 1) {
+        element.serviceList.forEach((el) => {
+          const tdGroupnameLi = document.createElement('li');
+          tdGroupnameLi.innerHTML = el.name;
+          tdGroupnameUl.appendChild(tdGroupnameLi);
+        });
+      }
+
       tdGroupname.appendChild(tdGroupnameUl);
       tr.appendChild(tdGroupname);
 
@@ -156,26 +135,54 @@ const JoinGroup = () => {
       Updates.appendChild(imgUpdate);
       Deletes.appendChild(imgDelete);
 
-      Updates.addEventListener('click' , () => {
-        setGropname(element.groupname);
-        setStatus(element.status)
+      Updates.addEventListener('click', () => {
+
+        fetch(`${BASE_URL}/group/list/service/${element.id}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${getAccessToken()}`,
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            setUsermap([]);
+            setSelectedServiceList([]);
+
+            const newServiceList = data.data.serviceList.map((e) => ({
+              value: e.id,
+              label: e.name,
+            }));
+
+            const newExistList = data.data.existList.map((e) => ({
+              value: e.id,
+              label: e.name,
+            }));
+
+            setUsermap((prevUserMap) => [...prevUserMap, ...newServiceList]);
+            setSelectedServiceList((existList) => [...existList, ...newExistList]);
+          })
+          .catch((error) => {
+            console.error("Xatolik yuz berdi:", error);
+          });
+
         document.getElementById('modalDelete').style.display = "flex";
         document.getElementById('formModalBtn').style.display = "flex";
         document.getElementById('modal-delete-body').style.display = "flex";
         document.querySelector('.join-group-header-body-form').style.display = "none";
         document.getElementById('formModalDelete').style.display = "none";
         setId(element.id);
-      })
+        setGropname(element.name);
+      });
 
-      Deletes.addEventListener('click' , () => {
+      Deletes.addEventListener('click', () => {
         document.getElementById('modalDelete').style.display = "flex";
         document.getElementById('formModalBtn').style.display = "none";
         document.getElementById('modal-delete-body').style.display = "flex";
         document.querySelector('.join-group-header-body-form').style.display = "none";
         document.getElementById('formModalDelete').style.display = "flex";
         setId(element.id);
-      })
-
+      });
 
       tdBtn.appendChild(Updates);
       tdBtn.appendChild(Deletes);
@@ -183,25 +190,23 @@ const JoinGroup = () => {
 
       Tbody.appendChild(tr);
     });
-
   };
 
-  useEffect( () => {
+  useEffect(() => {
     if (localStorage.getItem('Role') === "ROLE_USER") {
-      window.location.pathname = "/home"
-    }else{
-      sayt()
-      TableBackUser(TableBeck);
+      window.location.pathname = '/home'
+    } else {
+      sayt();
     }
-  },[sort],[DubleList])
-
+  }, [sort, DubleList , FilterName]);
 
   const SortBtnList = (e) => {
     setDubleList(e.target.value);
-    setSort(1)
+    setSort(1);
   };
 
   const OffUpdateModal = () => {
+    setGropname('');
     document.getElementById('modalDelete').style.display = "none";
     document.getElementById('modal-delete-body').style.display = "none";
     document.getElementById('formModalBtn').style.display = "none";
@@ -212,27 +217,22 @@ const JoinGroup = () => {
   }
 
   const sendUpdateModal = () => {
-
     setTimeout(() => {
       setShowSuccess(false);
-      // window.location.reload();
+      window.location.reload();
     }, 3000);
 
-    const firstName = FirstName;
-    const lastName = LastName;
-    const groupname = Groupname;
-    const status = Status.value;
+    const id = Id;
+    const name = Groupname;
+    const serviceList = selectedServiceList.map((service) => service.value); 
 
     const data = {
-      firstName,
-      lastName,
-      groupname,
-      status,
+      id,
+      name,
+      serviceList,
     };
 
-    
-    
-    fetch(`http://localhost:8081/user/update/${Id}`, {
+    fetch(`${BASE_URL}/group/update/${Id}`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${getAccessToken()}`,
@@ -242,32 +242,29 @@ const JoinGroup = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-          setSuccess(data.success);
-          setText(data.message);
-          setShowSuccess(true);
+        setSuccess(data.success);
+        setText(data.message);
+        setShowSuccess(true);
       })
       .catch((error) => {
         console.error("Xatolik yuz berdi:", error);
       });
 
-
-      document.getElementById('modalDelete').style.display = "none";
-      document.getElementById('formModalBtn').style.display = "none";
-      document.getElementById('modal-delete-body').style.display = "none";
-      document.querySelector('.join-group-header-body-form').style.display = "none";
-      document.getElementById('formModalDelete').style.display = "none"
+    document.getElementById('modalDelete').style.display = "none";
+    document.getElementById('formModalBtn').style.display = "none";
+    document.getElementById('modal-delete-body').style.display = "none";
+    document.querySelector('.join-group-header-body-form').style.display = "none";
+    document.getElementById('formModalDelete').style.display = "none";
   }
 
   const DeleteUser = () => {
-
     setTimeout(() => {
       setShowSuccess(false);
       window.location.reload();
     }, 3000);
 
-
-      fetch(`http://localhost:8081/user/delete/${Id}`, {
-      method: "PUT",
+    fetch(`${BASE_URL}/group/delete/${Id}`, {
+      method: "DELETE",
       headers: {
         Authorization: `Bearer ${getAccessToken()}`,
         "Content-Type": "application/json",
@@ -276,33 +273,31 @@ const JoinGroup = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-          setSuccess(data.success);
-          setText(data.message);
-          setShowSuccess(true);
+        setSuccess(data.success);
+        setText(data.message);
+        setShowSuccess(true);
       })
       .catch((error) => {
         console.error("Xatolik yuz berdi:", error);
       });
 
-      document.getElementById('modalDelete').style.display = "none";
-      document.getElementById('formModalBtn').style.display = "none";
-      document.getElementById('modal-delete-body').style.display = "none";
-      document.querySelector('.join-group-header-body-form').style.display = "none";
-      document.getElementById('formModalDelete').style.display = "none"
+    document.getElementById('modalDelete').style.display = "none";
+    document.getElementById('formModalBtn').style.display = "none";
+    document.getElementById('modal-delete-body').style.display = "none";
+    document.querySelector('.join-group-header-body-form').style.display = "none";
+    document.getElementById('formModalDelete').style.display = "none";
   }
 
-  const renderSuccessMessage = () =>{
+  const renderSuccessMessage = () => {
     if (showSuccess) {
       return (
-        <Success title={text} background={success}/>
+        <Success title={text} background={success} />
       );
     }
   }
 
   const formFiltre = () => {
     setGropname('');
-    setFirstName('');
-    setLastName('');
     setDisplay(!Display);
   }
 
@@ -316,174 +311,109 @@ const JoinGroup = () => {
   }
 
   const handleFormClear = () => {
-    window.location.reload();
+    setGropname('');
+    setFilterName(Groupname);
   }
 
   const handleStatusChangeUsers = (users) => {
-    setSuccess(users)
-  };  
-
-  const handleChangeStatus = (status) => {
-    setStatus(status)
+    setSelectedServiceList(users);
   };
 
-  const status = [
-    { value: true, label: 'Active' },
-    { value: false, label: 'No active' },
-  ];
-
-  const allValues = usersMap.map(user => user.value);
-
   return (
+    <div className="join-group">
 
-  <div className="join-group">
-
-    <div className="join-group-header">
-
-      <div className="join-group-header-body">
+      <div className="join-group-header">
+        <div className="join-group-header-body">
           <div className="join-group-header-title">
             Group
           </div>
-
           <div className="group-main-items">
-
-             <button className="group-main-item-list3" onClick={formFiltre}>Filter</button>
-
-              <Link to="/home/group/addgroup" className="join-group-header-btn" title="Transfer">  Add Groups </Link>
-
+            <button className="group-main-item-list3" onClick={formFiltre}>Filter</button>
+            <Link to="/home/group/addgroup" className="join-group-header-btn" title="Transfer"> Add Groups </Link>
           </div>
-
+        </div>
+        <form action="" className="join-group-header-body-form" style={{ display: Display ? "flex" : "none" }} onClick={handleFormSubmit}>
+          <div className="input-body">
+            <label htmlFor="" className="group-label">Group name: </label>
+            <input type="text" name="groupname" value={Groupname} className="group-input" onChange={(e) => setGropname(e.target.value)} />
+          </div>
+          <div className="input-body-items">
+            <button type="submit" style={{ border: "none" }} onClick={handleFormSubmites}>
+              <img src={FilterImg} alt="Submit" className="group-btn" />
+            </button>
+            <button type="submit" style={{ border: "none" }} onClick={handleFormClear}>
+              <img src={FilterClose} alt="Submit" className="group-close" />
+            </button>
+          </div>
+        </form>
       </div>
 
-      <form action="" className="join-group-header-body-form" style={{ display: Display ? "flex" : "none" }} onClick={handleFormSubmit}>
-
-        <div className="input-body">
-          <label htmlFor="" className="group-label">Group name: </label>
-          <input type="text" name="groupname" value={Groupname} className="group-input" onChange={(e) => setGropname(e.target.value)} />
+      <div className="Slide">
+        <div className="slide-menu">
+          <div className="sortBtn cursor" onClick={dubleSortMin}>{'<<'}</div>
+          <div className="sortBtn cursor" onClick={sortMin}> {'<'} </div>
+          <li className="sortBasc sortBtn">{sort}</li>
+          <div className="sortBtn cursor" onClick={sortMax}> {'>'} </div>
+          <div className="sortBtn cursor" onClick={dubleSortMax}> {'>>'} </div>
         </div>
-
-        <div className="input-body">
-            <label htmlFor="" className="group-label">Status: </label>
-            <Select value={Status} onChange={handleChangeStatus} options={status} className='user-select-modal' />
-          </div>
-
-        <div className="input-body-items">
-
-          <button type="submit" style={{border:"none"}} onClick={handleFormSubmites}>
-            <img src={FilterImg} alt="Submit" className="group-btn" />
-          </button>
-
-          <button type="submit" style={{border:"none"}} onClick={handleFormClear}>
-            <img src={FilterClose} alt="Submit" className="group-close" />
-          </button>
-
+        <div className="sortBtnList">
+          <select id="cars" onChange={SortBtnList}>
+            <option value={15} className="sortBtnList">15</option>
+            <option value={25} className="sortBtnList">25</option>
+            <option value={50} className="sortBtnList">50</option>
+          </select>
         </div>
+        <div className="sortBtn colorRed">All count : {list}</div>
+      </div>
 
-      </form>
-
-    </div>
-
-    <div className="Slide">
-
-              <div className="slide-menu">
-                  <div className="sortBtn cursor" onClick={dubleSortMin}>{'<<'}</div>
-
-                  <div className="sortBtn cursor" onClick={sortMin}> {'<'} </div>
-
-                  <li className="sortBasc sortBtn">{sort}</li>
-
-                  <div className="sortBtn cursor" onClick={sortMax}> {'>'} </div>
-
-                  <div className="sortBtn cursor" onClick={dubleSortMax}> {'>>'} </div>
-              </div>
-
-              <div className="sortBtnList">
-                  <select id="cars" onChange={SortBtnList}>
-                      <option value={10} className="sortBtnList">10</option>
-                      <option value={25} className="sortBtnList">25</option>
-                      <option value={50} className="sortBtnList">50</option>
-                  </select>
-              </div>
-
-
-              <div className="sortBtn colorRed">All count : {list}</div>
-
-    </div>
-
-    <div className="join-group-section">
-    
-      <table>
-
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>Group name</th>
-            <th>Service name</th>
-            <th>status</th>
-            <th className="join-group-table-center">
-            </th>
-          </tr>
-        </thead>
-
-        <tbody className="Table-tbody">
-        </tbody>
-
-      </table>
-
-      <div className="modalDelete" id="modalDelete"></div>
-
-      <div className="modal-delete-body" id="modal-delete-body">
-
+      <div className="join-group-section">
+        <table>
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Group name</th>
+              <th>Service name</th>
+              <th>Status</th>
+              <th className="join-group-table-center"></th>
+            </tr>
+          </thead>
+          <tbody className="Table-tbody">
+            {/* Table rows will be dynamically added here */}
+          </tbody>
+        </table>
+        
+        <div className="modalDelete" id="modalDelete"></div>
+        <div className="modal-delete-body" id="modal-delete-body">
           <div className="formModalDelete" id="formModalDelete">
-
             <div className="formModalDelete-forms">
-                <div className="formModalDelete-title">Do you want to delete ?</div>
-
-                <div className="formModalDelete-btn-body">
-                  <button className="formModalDelete-btn-body-btn green" onClick={OffUpdateModal}>Cancel</button>
-                  <button className="formModalDelete-btn-body-btn red" onClick={DeleteUser}>Delete</button>
-                </div>
-
+              <div className="formModalDelete-title">Do you want to delete ?</div>
+              <div className="formModalDelete-btn-body">
+                <button className="formModalDelete-btn-body-btn green" onClick={OffUpdateModal}>Cancel</button>
+                <button className="formModalDelete-btn-body-btn red" onClick={DeleteUser}>Delete</button>
+              </div>
             </div>
-
           </div>
-
           <form action="" className="formModalBtn" onClick={(e) => modalFormClick(e)} id="formModalBtn">
-
             <h1>Update Group </h1>
-
             <div className="formModalBtn-inputs">
               <label htmlFor="" className="formModalBtn-inputs-label">Group name : </label>
-              <input type="text" name="" id="" className="formModalBtn-inputs-item" value={Groupname} onChange={(e) => setGropname(e.target.value)}/>
+              <input type="text" name="" id="" className="formModalBtn-inputs-item" value={Groupname} onChange={(e) => setGropname(e.target.value)} />
             </div>
-
             <div className="formModalBtn-inputs">
               <label htmlFor="" className="formModalBtn-inputs-label">Services : </label>
-              {console.log(allValues)}
-              <Select className="group-input-select" closeMenuOnSelect={true} components={animatedComponents} value={usersMap.value} defaultValue={usersMap[0]} isMulti options={usersMap} onChange={(e) => handleStatusChangeUsers(e)}/>
+              <Select className="user-select-modal" closeMenuOnSelect={true} defaultValue={selectedServiceList} value={selectedServiceList} isMulti options={userMap} onChange={(e) => handleStatusChangeUsers(e)} />
             </div>
-
-            <div className="formModalBtn-inputs">
-              <label htmlFor="" className="formModalBtn-inputs-label">Status: </label>
-              <Select value={Status} defaultValue={status[0]} onChange={handleChangeStatus} options={status} className='user-select-modal' />
-            </div>
-            
-            
             <div className="formModalBtn-inputs-btn">
               <button className="formModalBtn-inputs-btn-item-red" onClick={OffUpdateModal}>Cancel</button>
               <button className="formModalBtn-inputs-btn-item-blue" onClick={sendUpdateModal}>Update</button>
             </div>
-
-
           </form>
-
+        </div>
       </div>
 
+      {renderSuccessMessage()}
     </div>
-
-    {renderSuccessMessage()}
-  </div>
   );
 };
 
-export default JoinGroup;
+export default Group;

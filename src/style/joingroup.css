@@ -69,6 +69,9 @@
   border: 1px solid rgb(160, 157, 157);
   cursor: pointer;
 }
+.join-group-section table .Table-tbody .tr-tbody td{
+  padding: 10px 0px;
+}
 
 .join-group-table-tbody-btn .blue{
   margin-right: 5px;

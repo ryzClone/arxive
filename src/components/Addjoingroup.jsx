@@ -1,39 +1,28 @@
 import React, {Component } from "react";
 import "../style/AddService.css";
 import Select from 'react-select';
+import Success from './SucsesFull';
+import {BASE_URL} from "./base_url.jsx"
+
+
 import makeAnimated from 'react-select/animated';
 
 const animatedComponents = makeAnimated();
 
-const options = [
-  { value: 'Active', label: 'Active' },
-  { value: 'noActive', label: 'noActive' },
-];
-
-const users = [
-  { value: 'mbms', label: 'mbms' },
-  { value: 'nets', label: 'nets' },
-  { value: 'rack', label: 'rack' },
-];
-
-const groups = [
-  { value: 'All', label: 'All' },
-  { value: 'Active', label: 'Active' },
-  { value: 'noActive', label: 'noActive' },
-  { value: 'noActives', label: 'noActives' },
-  { value: 'noActived', label: 'noActived' },
-  { value: 'noActivef', label: 'noActivef' },
-  { value: 'noActiveg', label: 'noActiveg' },
-];
-
+const UsersList = [];
+const GroupsList = [];
 
 class AddUserJoin extends Component {
   constructor(props) {
     super(props);
     this.state = {
       users: [],
-      status: '',
       groups: [],
+
+      showSuccess: false,
+      Success: '',
+      text:"",
+      color: false,
     };
   }
 
@@ -41,7 +30,6 @@ class AddUserJoin extends Component {
     this.setState({ users }, () =>
       this.state.users
     );
-    console.log('Hello Wolrd');
   };  
 
   handleStatusChangeStatus = (status) => {
@@ -51,35 +39,126 @@ class AddUserJoin extends Component {
   };
 
   handleStatusChangeGroup = (groups) => {
-
     this.setState({ groups }, () =>
       this.state.groups
     );
-
   };
+
+  FormSubmit = () => {
+
+    setTimeout(() => {
+      this.setState({
+        showSuccess: false,
+      });
+      // window.location.reload();
+    }, 3000);
+
+
+    const userList = this.state.users.map(item => item.value);
+    const groupList = this.state.groups.map(item => item.value);
+
+    const data = {
+      userList,
+      groupList,
+    };
+    fetch(`${BASE_URL}/user/group`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${this.getAccessToken()}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+
+        this.setState({
+          text: data.message,
+          showSuccess:true,
+          color:data.success,
+        })
+      
+      })
+      .catch((error) => {
+        console.error("Xatolik yuz berdi:", error);
+
+        this.setState({
+          text: "Something went wrong:",
+          showSuccess:true,
+          color:data.success,
+        })
+
+      });
+
+      this.setState({
+        users: [],
+        groups: [],
+
+        showSuccess: '',
+        Success: '',
+      });
+
+
+  }
 
   handleFormSubmit = (e) => {
     e.preventDefault();
   }
 
-  sendFromSubmit = () => {
-
-    this.setState({
-      status:'',
-    })
-
-  }
-  
-    Loger = () => {
-      console.log('Hello World');
-    }
-
   componentDidMount = () => {
     if(localStorage.getItem('Role') === "ROLE_USER"){
       window.location.pathname = "/home"
     }
+    this.SelectList();
   }
 
+  SelectList = () => {
+
+    fetch(`${BASE_URL}/user/add/group/select`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${this.getAccessToken()}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+
+        data.data.serviceList.forEach((e) => {
+          const isDuplicate = GroupsList.some(item => item.value === e.id && item.label === e.name);
+        
+          if (!isDuplicate) {
+            GroupsList.push({ value: e.id, label: e.name });
+          }
+        });
+
+        data.data.existList.forEach((e) => {
+          const isDuplicate = UsersList.some(item => item.value === e.id && item.label === e.name);
+        
+          if (!isDuplicate) {
+            UsersList.push({ value: e.id, label: e.name });
+          }
+        });
+
+      })
+      .catch((error) => {
+        console.error("Xatolik yuz berdi:", error);
+      });
+
+  }
+
+  getAccessToken = () => {
+    return localStorage.getItem("jwtToken");
+  };
+
+  renderSuccessMessage() {
+    if (this.state.showSuccess) {
+      return (
+        <Success title={this.state.text} background={this.state.color}/>
+      );
+    }
+    return null;
+  }
 
   render() {
     return (
@@ -95,31 +174,19 @@ class AddUserJoin extends Component {
 
             <div className="add-service-input">
 
-              <Select className="group-input-select" closeMenuOnSelect={true} components={animatedComponents} isMulti options={users} onChange={this.handleStatusChangeUsers} />
+              <Select className="group-input-selects" closeMenuOnSelect={true} components={animatedComponents} value={UsersList.name} isMulti options={UsersList} onChange={this.handleStatusChangeUsers} />
 
             </div>
 
           </div>
 
           <div className="add-service-status">
-
+ 
             <h3>Groups</h3>
 
             <div className="add-service-input">
 
-              <Select className="group-input-select" closeMenuOnSelect={true} components={animatedComponents} isMulti options={groups} onChange={this.handleStatusChangeGroup} />
-
-            </div>
-
-          </div>
-
-          <div className="add-service-status">
-
-            <h3>Status</h3>
-
-            <div className="add-service-input">
-
-              <Select value={this.state.status} onChange={this.handleStatusChangeStatus} options={options} className="group-input-select" />
+              <Select className="group-input-selects" closeMenuOnSelect={true} components={animatedComponents} value={GroupsList.name} isMulti options={GroupsList} onChange={this.handleStatusChangeGroup} />
 
             </div>
 
@@ -127,14 +194,14 @@ class AddUserJoin extends Component {
 
           <div className="add-service-btn-body">   
 
-            <button type="submit" className="add-service-btn" onClick={this.sendFromSubmit}>
+            <button type="submit" className="add-service-btn" onClick={this.FormSubmit}>
                 Submit
             </button>
 
           </div>
 
         </form>
-        
+        {this.renderSuccessMessage()}
     </div>
     );
   }
