@@ -2,12 +2,6 @@ import React, { Component } from "react";
 import "../style/Group.css";
 import { BASE_URL } from "../components/base_url";
 
-const options = [
-  { value: 'All', label: 'All' },
-  { value: 'Active', label: 'Active' },
-  { value: 'noActive', label: 'noActive' },
-];
-
 class Folders extends Component {
   constructor(props) {
     super(props);
