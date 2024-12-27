@@ -105,32 +105,34 @@ export default function Contracts() {
         }
     };
 
-    const handleDownload = (e) => {
-        const data = {
-            yearName,
-            monthName,
-            dayName,
-            key : e,
-        };
 
-        if (isActiveKey && (yearName || monthName || dayName)) {
-            setISactivate(true);
+const handleDownload = (e) => {
+    // `data` obyektini dinamik ravishda to'g'rilash
+    const data = {
+        yearName,
+        monthName,
+        dayName,
+        key: e === 'contracts.zip' ? key : e,
+    };
 
-            fetch(`${BASE_URL}/service/download/contracts`, {
-                method: "POST",
-                headers: {
-                    Authorization: `Bearer ${getAccessToken()}`,
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data),
-            })
+    if (e === 'contracts.zip') {
+        setISactivate(true);
+
+        fetch(`${BASE_URL}/service/download/zip/contracts`, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${getAccessToken()}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        })
             .then((response) => {
                 if (!response.ok) {
-                  throw new Error(`HTTP error! Status: ${response.status}`);
+                    throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 return response.blob();
-              })
-              .then((blob) => {
+            })
+            .then((blob) => {
                 const url = window.URL.createObjectURL(new Blob([blob]));
                 const link = document.createElement('a');
                 link.href = url;
@@ -139,12 +141,46 @@ export default function Contracts() {
                 link.click();
                 link.parentNode.removeChild(link);
                 setISactivate(false);
-              })
-              .catch((error) => {
+            })
+            .catch((error) => {
                 console.error('Xatolik yuz berdi:', error);
-              });
-        }
-    };
+            });
+
+
+    } else if (isActiveKey && (yearName || monthName || dayName)) {
+        setISactivate(true);
+
+        fetch(`${BASE_URL}/service/download/contracts`, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${getAccessToken()}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.blob();
+            })
+            .then((blob) => {
+                const url = window.URL.createObjectURL(new Blob([blob]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', `${e}`);
+                document.body.appendChild(link);
+                link.click();
+                link.parentNode.removeChild(link);
+                setISactivate(false);
+            })
+            .catch((error) => {
+                console.error('Xatolik yuz berdi:', error);
+            });
+    }
+};
+
+    
 
     const handleChangeKey = (e) => {
         const value = e.target.value;
@@ -296,15 +332,24 @@ export default function Contracts() {
                             </tr>
                         </thead>
                         <tbody className="Table-tbody">
-                            {files.data.map((file, index) => (
+                        <tr className="table-tr-withPermission">
+                        <td className="padding-withPermission">1</td>
+                        <td>ZIP file</td>
+                        <td onClick={() => handleDownload("contracts.zip")}>
+                            <i className="fas fa-download"></i>
+                        </td>
+                        </tr>
+                        {files.data.map((file, index) => (
                                 <tr key={index} className="table-tr-withPermission">
-                                    <td className="padding-withPermission">{index + 1}</td>
+                                    <td className="padding-withPermission">{index + 2}</td>
                                     <td>{file}</td>
                                     <td onClick={() => handleDownload(file)}>
-                                            <i className="fas fa-download"></i>
+                                        <i className="fas fa-download"></i>
                                     </td>
                                 </tr>
-                            ))}
+                        ))}
+
+
                         </tbody>
                     </table>
                 ) : (
