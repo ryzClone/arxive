@@ -15,6 +15,7 @@ import Joingroup from "../png/section/aside/joingroup.png";
 import Service from "../png/section/aside/service.png";
 import History from "../png/section/aside/history.png";
 import search from "../png/section/aside/search-black.png"
+import contracts from "../png/section/aside/document-files.png"
 
 class Layout extends Component {
   constructor(props) {
@@ -181,8 +182,8 @@ class Layout extends Component {
                   
               </Link>
 
-              <Link to="/home/contracts" className="link" title="Search">
-                  <img src={search} alt="" style={{width:"25px" , height:"25px" , filter: "brightness(0) invert(1)"}}/>
+              <Link to="/home/contracts" className="link" title="Search" >
+                  <img src={contracts} alt="" style={{width:"25px" , height:"25px" , filter: "brightness(0) invert(1)"}}/>
 
                   <div className="linkText">
                   Contracts
