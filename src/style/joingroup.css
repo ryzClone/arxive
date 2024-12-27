@@ -1,0 +1,325 @@
+.join-group{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 10px;
+    gap: 20px;
+}
+.join-group-header{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+.join-group-header-title{
+    font-size: 24px;
+    font-family: "-apple-system";
+    margin: 8px 0px;
+    color: #212529;
+}
+.join-group-header-btn{
+    background-color: #1890ff;
+    font-size: 14px;
+    padding: 8px 16px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+    text-decoration: none;
+}
+
+/* section ######################################################################### */
+.join-group-section table{
+  width: 100%;
+}
+.join-group-section table , th , td{
+  border: none;
+  border-collapse: collapse;
+}
+.join-group-section table  th{
+  background-color: #343a40;
+  padding: 10px 0px;
+  color: #fff;
+  text-align: center;
+}
+.join-group-section table td{
+  border:1px solid rgb(173, 173, 174);
+  border: none;
+  text-align: center;
+}
+.join-group-section table tr:nth-child(odd){
+  background-color: #dddcdc;
+}
+.join-group-section table .tbody-ul{
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0px;
+}
+
+.join-group-section table .tbody-ul li{
+  list-style: none;
+  padding: 0px 5px;
+  color: #000;
+  border-radius: 2px;
+  border: 1px solid rgb(160, 157, 157);
+  cursor: pointer;
+}
+.join-group-section table .Table-tbody .tr-tbody td{
+  padding: 10px 0px;
+}
+
+.join-group-table-tbody-btn .blue{
+  margin-right: 5px;
+  border: none;
+  background-color:#1890ff;
+  padding: 3px 5px;
+  cursor: pointer;
+}
+.join-group-table-tbody-btn .red{
+  margin-right: 10px;
+  border: none;
+  background-color: #a30041;
+  padding: 3px 5px;
+  cursor: pointer;
+}
+
+  .join-group-table-tbody-img{
+    width: 20px;
+    height: 20px;
+  }
+  .tbody-th-select{
+    width: 65%;
+  }
+   /* ########################### */
+   .Slide{
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    list-style: none;
+  }
+  
+  .slide-menu{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-collapse: collapse;
+  }
+  .sortBtn{
+    color:#343a40;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-family: Poppins-Regular,sans-serif;
+    border: 1px solid #dee2e6;
+    box-sizing: border-box;
+    cursor: pointer;
+  }
+  .sortBasc{
+    background-color: #343a40;
+    border-color: #343a40;
+    color: #fff;
+  }
+  .colorRed{
+    color: #343a40;
+  }
+  .sortBtnList{
+    font-size: 14px;
+    font-family: Poppins-Regular,sans-serif;
+    border: 1px solid #dee2e6;
+    box-sizing: border-box;
+    padding: 2px;
+  }
+  #cars{
+    padding: 6px 10px;
+    border: none;
+    width: 100%;
+    height: 100%;
+    outline: none;
+  }
+ 
+  .readUserSrcUpdate{
+    width: 30px;
+    height: 30px;
+    background-color: #1890ff;
+    border: none;
+    padding: 5px 5px;
+  }
+
+  .readUserSrcDelete{
+    width: 30px;
+    height: 30px;
+    background-color: #a30041;
+    border: none;
+    padding: 5px 5px;
+  }
+  .readUserSrcBody{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 5px 0px 5px 0px;
+    gap: 10px;
+    border: none;
+  }
+  .readUserBtn{
+    border: none;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+  }
+  .join-group-table-center{
+    width: 10%;
+  }
+  .join-group-header-body{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .join-group-header-body-form{
+    width: 100%;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin: 20px 0px;
+  }
+
+  .modalDelete{
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    width: 100%;
+    height: 100%;
+    background-color: #343a40;
+    opacity: 40%;
+  }
+  .modal-delete-body{
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    padding-top: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    opacity: 100%;
+    z-index: 5;
+  }
+  .formModalBtn{
+    display: none;
+    width: 500px;
+    border: 1px solid #fff;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .formModalBtn-inputs{
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+  .formModalBtn-inputs-label{
+    min-width: 32%;
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .formModalBtn-inputs-item{
+    width: 78%;
+    padding: 9px 0px 10px 10px;
+    border: 1px solid hsl(0, 0%, 80%);
+    border-radius: 3px;
+  }
+  .formModalBtn-inputs-item:focus{
+    outline: none;
+    border:1px solid #1890ff;
+  }
+  .formModalBtn-inputs-btn{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+  }
+  .formModalBtn-inputs-btn-item-blue{
+    background-color: #1890ff;
+    border: 1px solid #1890ff;
+    color: #fff;
+    padding: 10px 80px;
+    margin-top: 20px;
+    border-radius: 3px;
+  }
+
+  .formModalBtn-inputs-btn-item-red{
+    background-color: #a30041;
+    border: 1px solid #a30041;
+    color: #fff;
+    padding: 10px 80px;
+    margin-top: 20px;
+    border-radius: 3px;
+  }
+  .formModalBtn h1{
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-align: center;
+    margin: 10px 0px;
+  }
+  .formModalDelete{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+  }
+  .formModalDelete-forms{
+    width: 300px;
+    height: 100px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-radius: 3px;
+    margin-top: 20px;
+    padding: 20px;
+  }
+  .formModalDelete-title{
+    font-size: 18px;
+  }
+  .formModalDelete-btn-body{
+    display: flex;
+    gap: 20px;
+    justify-content: flex-end;
+  }
+  .formModalDelete-btn-body-btn{
+    padding: 6px 10px;
+    font-size: 14px;
+    color: #fff;
+    border-radius: 5px;
+  }
+  .green {
+    border: 1px solid green;
+    background-color: green;
+    cursor: pointer;
+  }
+
+  .red {
+    border: 1px solid #a30041;
+    background-color: #a30041;
+    cursor: pointer;
+  }
